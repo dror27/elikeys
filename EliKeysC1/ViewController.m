@@ -10,6 +10,9 @@
 #import <AVFoundation/AVFoundation.h>
 #import "KeyStateMachine.h"
 
+#define SHOW_VOICES     1
+#define SHOW_MIDI       1
+
 @interface ViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *label;
 
@@ -33,14 +36,54 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    // create key machine
     _ksm = [[KeyStateMachine alloc] initWith:self];
     
-    NSArray<AVSpeechSynthesisVoice *> * voices = [AVSpeechSynthesisVoice speechVoices];
-    for (AVSpeechSynthesisVoice* voice in voices) {
-        NSLog(@"voice: %@: %@", [voice name], [voice language]);
+    // create speaking synth
+    if ( SHOW_VOICES ) {
+        NSArray<AVSpeechSynthesisVoice *> * voices = [AVSpeechSynthesisVoice speechVoices];
+        for (AVSpeechSynthesisVoice* voice in voices) {
+            NSLog(@"voice: %@: %@", [voice name], [voice language]);
+        }
     }
     _voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"he-IL"];
     _synth = [[AVSpeechSynthesizer alloc] init];
+    
+    // list midi devices
+    if ( SHOW_MIDI ) {
+        ItemCount     count = MIDIGetNumberOfDevices();
+        for ( int n = 0 ; n < count ; n++ ) {
+            MIDIDeviceRef   dev = MIDIGetDevice(n);
+            NSLog(@"MIDI Device %d: %u", n, (unsigned int)dev);
+            ItemCount       ecount = MIDIDeviceGetNumberOfEntities(dev);
+            for ( int m = 0 ; m < ecount ; m++ ) {
+                MIDIEntityRef   ent = MIDIDeviceGetEntity(dev, m);
+                NSLog(@"MIDI Entity %d: %u", m, (unsigned int)ent);
+            }
+        }
+        count = MIDIGetNumberOfExternalDevices();
+        for ( int n = 0 ; n < count ; n++ ) {
+            MIDIDeviceRef   dev = MIDIGetExternalDevice(n);
+            NSLog(@"MIDI External Device %d: %u", n, (unsigned int)dev);
+            ItemCount       ecount = MIDIDeviceGetNumberOfEntities(dev);
+            for ( int m = 0 ; m < ecount ; m++ ) {
+                MIDIEntityRef   ent = MIDIDeviceGetEntity(dev, m);
+                NSLog(@"MIDI Entity %d: %u", m, (unsigned int)ent);
+            }
+        }
+        
+        count = MIDIGetNumberOfSources();
+        for ( int n = 0 ; n < count ; n++ ) {
+            MIDIEndpointRef   endp = MIDIGetSource(n);
+            NSLog(@"MIDI Endpoint %d: %u", n, (unsigned int)endp);
+        }
+    }
+    
+    MIDIClientRef     clientRef;
+    MIDIClientCreateWithBlock(@"Client", &clientRef, ^ (const MIDINotification *message) {
+        NSLog(@"message: %@", message);
+    });
+    
 }
 
 - (void)display:(NSString*)text {

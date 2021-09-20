@@ -8,48 +8,39 @@
 #import "ViewController.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
+#import "KeyStateMachine.h"
 
 @interface ViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *label;
+
+@property (nonatomic) AVSpeechSynthesisVoice* voice;
+@property (nonatomic) AVSpeechSynthesizer* synth;
+@property (nonatomic) KeyStateMachine* ksm;
 
 @end
 
 @implementation ViewController
 
-NSString        *en = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-NSString        *he = @"אבגדהוזחטיכלמנסעפצקרשת";
 
 - (IBAction)buttonDown:(UIButton *)sender {
-    [self process:[sender.titleLabel.text intValue] With:0];
+    [_ksm process:[sender.titleLabel.text intValue] With:0];
 }
 - (IBAction)buttonUpInside:(UIButton *)sender {
-    [self process:[sender.titleLabel.text intValue] With:1];
+    [_ksm process:[sender.titleLabel.text intValue] With:1];
 }
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-}
 
-- (void)process:(int)buttonIndex With:(int)op {
-    NSLog(@"process: %d (%d)", buttonIndex, op);
-    if ( op != 1 )
-        return;
+    _ksm = [[KeyStateMachine alloc] initWith:self];
     
-    // keys 1-12 are letters
-    if ( buttonIndex >= 1 && buttonIndex <= 12 ) {
-        
-        NSString*   text = [NSString stringWithFormat:@"%@%C", _label.text, [he characterAtIndex:buttonIndex - 1]];
-        [self display:text];
-        
-    } else if ( buttonIndex == 16 ) {
-        [self display:@""];
-        AudioServicesPlaySystemSound(1003);
-    } else if ( buttonIndex == 13 ) {
-        [self speak];
+    NSArray<AVSpeechSynthesisVoice *> * voices = [AVSpeechSynthesisVoice speechVoices];
+    for (AVSpeechSynthesisVoice* voice in voices) {
+        NSLog(@"voice: %@: %@", [voice name], [voice language]);
     }
-    
+    _voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"he-IL"];
+    _synth = [[AVSpeechSynthesizer alloc] init];
 }
 
 - (void)display:(NSString*)text {
@@ -57,15 +48,29 @@ NSString        *he = @"אבגדהוזחטיכלמנסעפצקרשת";
     [_label setText:text];
 }
 
-- (void)speak {
+- (void)beep {
+    AudioServicesPlaySystemSound(1003);
+}
+
+- (void)beepClear {
+    AudioServicesPlaySystemSound(1003);
+}
+- (void)beepMode:(int)mode {
+    AudioServicesPlaySystemSound(1007 + mode);
+}
+
+- (void)speak:(NSString*)text {
     
-    AVSpeechUtterance*   utterance = [AVSpeechUtterance speechUtteranceWithString:@"Hello"];
-    AVSpeechSynthesisVoice* voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"en-GB"];
-    utterance.voice = voice;
+    AVSpeechUtterance*   utterance = [AVSpeechUtterance speechUtteranceWithString:text];
     
-    AVSpeechSynthesizer* synth = [[AVSpeechSynthesizer alloc] init];
+    utterance.voice = _voice;
+    utterance.rate = 0.37;
+    utterance.pitchMultiplier = 0.8;
+    utterance.postUtteranceDelay = 0.4;
+    utterance.volume = 0.8;
     
-    [synth speakUtterance:utterance];
+    
+    [_synth speakUtterance:utterance];
     
     
 }

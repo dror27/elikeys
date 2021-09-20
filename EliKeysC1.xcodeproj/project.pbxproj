@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E21AD30B26F87C2500A4263E /* KeyStateMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = E21AD30A26F87C2500A4263E /* KeyStateMachine.m */; };
 		E2CDC56426F76C3F00A29053 /* MIKMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2CDC56026F76BAA00A29053 /* MIKMIDI.framework */; };
 		E2CDC56526F76C3F00A29053 /* MIKMIDI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E2CDC56026F76BAA00A29053 /* MIKMIDI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E2CDC56926F787D800A29053 /* KeyStateMachine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2CDC56726F787D800A29053 /* KeyStateMachine.cpp */; };
 		E2CED39B26F50B19004B7DD5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E2CED39A26F50B19004B7DD5 /* AppDelegate.m */; };
 		E2CED39E26F50B19004B7DD5 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E2CED39D26F50B19004B7DD5 /* SceneDelegate.m */; };
 		E2CED3A126F50B19004B7DD5 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2CED3A026F50B19004B7DD5 /* ViewController.m */; };
@@ -74,9 +74,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E21AD30A26F87C2500A4263E /* KeyStateMachine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyStateMachine.m; sourceTree = "<group>"; };
+		E21AD30C26F87CDD00A4263E /* KeyStateMachine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyStateMachine.h; sourceTree = "<group>"; };
 		E2CDC55626F76BAA00A29053 /* MIKMIDI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MIKMIDI.xcodeproj; path = Frameworks/MIKMIDI/Framework/MIKMIDI.xcodeproj; sourceTree = "<group>"; };
-		E2CDC56726F787D800A29053 /* KeyStateMachine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = KeyStateMachine.cpp; sourceTree = "<group>"; };
-		E2CDC56826F787D800A29053 /* KeyStateMachine.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KeyStateMachine.hpp; sourceTree = "<group>"; };
 		E2CED39626F50B19004B7DD5 /* EliKeysC1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EliKeysC1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2CED39926F50B19004B7DD5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E2CED39A26F50B19004B7DD5 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -176,8 +176,8 @@
 				E2CED3A726F50B1A004B7DD5 /* LaunchScreen.storyboard */,
 				E2CED3AA26F50B1A004B7DD5 /* Info.plist */,
 				E2CED3AB26F50B1A004B7DD5 /* main.m */,
-				E2CDC56726F787D800A29053 /* KeyStateMachine.cpp */,
-				E2CDC56826F787D800A29053 /* KeyStateMachine.hpp */,
+				E21AD30A26F87C2500A4263E /* KeyStateMachine.m */,
+				E21AD30C26F87CDD00A4263E /* KeyStateMachine.h */,
 			);
 			path = EliKeysC1;
 			sourceTree = "<group>";
@@ -362,9 +362,9 @@
 			files = (
 				E2CED3A126F50B19004B7DD5 /* ViewController.m in Sources */,
 				E2CED39B26F50B19004B7DD5 /* AppDelegate.m in Sources */,
-				E2CDC56926F787D800A29053 /* KeyStateMachine.cpp in Sources */,
 				E2CED3AC26F50B1A004B7DD5 /* main.m in Sources */,
 				E2CED39E26F50B19004B7DD5 /* SceneDelegate.m in Sources */,
+				E21AD30B26F87C2500A4263E /* KeyStateMachine.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

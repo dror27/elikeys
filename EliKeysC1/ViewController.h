@@ -9,6 +9,10 @@
 
 @interface ViewController : UIViewController
 
-
+- (void)display:(NSString*)text;
+- (void)speak:(NSString*)text;
+- (void)beep;
+- (void)beepClear;
+- (void)beepMode:(int)mode;
 @end
 

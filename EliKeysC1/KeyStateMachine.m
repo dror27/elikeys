@@ -14,6 +14,7 @@
 
 -(void)speakAcc;
 -(NSString*)prepForSpeech:(NSString*)text;
+-(NSString*)buttonDiscoverySpokenText:(int)buttonIndex;
 
 @end
 
@@ -42,20 +43,17 @@ NSString        *modeSpeechText[3] = {
 
 - (void)process:(int)buttonIndex With:(int)op {
     NSLog(@"process: %d (%d)", buttonIndex, op);
-    if ( op != 1 )
+    if ( op == 0 ) {
+        [_viewController speak:[self buttonDiscoverySpokenText:buttonIndex]];
         return;
+    }
     
     // keys 1-12 are letters
     if ( buttonIndex >= 1 && buttonIndex <= 12 ) {
         NSString*   letter = [NSString stringWithFormat:@"%C", [letterKeys[letterMode] characterAtIndex:buttonIndex - 1]];
-        if ( [letter isEqualToString:@" "] )
-            [_viewController speak:@"רווח"];
-        if ( [letter isEqualToString:@"."] )
-            [_viewController speak:@"נקודה"];
-        else
-            [_viewController speak:letter];
         [_acc appendString:letter];
         [_viewController display:_acc];
+        [self speakAcc];
         
     } else if ( buttonIndex == 16 ) {
         [_acc setString:@""];
@@ -111,5 +109,27 @@ NSString        *modeSpeechText[3] = {
     return result;
 }
 
+-(NSString*)buttonDiscoverySpokenText:(int)buttonIndex {
+    
+    // keys 1-12 are letters
+    if ( buttonIndex >= 1 && buttonIndex <= 12 ) {
+        NSString*   letter = [NSString stringWithFormat:@"%C", [letterKeys[letterMode] characterAtIndex:buttonIndex - 1]];
+        if ( [letter isEqualToString:@" "] )
+            letter = @"רווח";
+        else if ( [letter isEqualToString:@"."] )
+            letter = @"נקודה";
+        return letter;
+    } else if ( buttonIndex == 16 ) {
+        return @"ניקוי";
+    } else if ( buttonIndex == 15 ) {
+        return @"מחיקה";
+    } else if ( buttonIndex == 14 ) {
+        return @"לוחות";
+    } else if ( buttonIndex == 13 ) {
+        return @"הקראה";
+    } else {
+        return @"";
+    }
+}
 @end
 

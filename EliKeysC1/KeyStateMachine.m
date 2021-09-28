@@ -53,7 +53,8 @@ NSString        *modeSpeechText[3] = {
         NSString*   letter = [NSString stringWithFormat:@"%C", [letterKeys[letterMode] characterAtIndex:buttonIndex - 1]];
         [_acc appendString:letter];
         [_viewController display:_acc];
-        [self speakAcc];
+        //[self speakAcc];
+        [_viewController beepAdded];
         
     } else if ( buttonIndex == 16 ) {
         [_acc setString:@""];
@@ -71,6 +72,11 @@ NSString        *modeSpeechText[3] = {
     } else if ( buttonIndex == 13 ) {
         [self speakAcc];
     }
+}
+
+-(void)resetMode {
+    letterMode = 0;
+    [_viewController speak:modeSpeechText[letterMode]];
 }
 
 -(void)speakAcc {

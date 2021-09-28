@@ -13,6 +13,7 @@
 - (void)speak:(NSString*)text;
 - (void)beep;
 - (void)beepClear;
+- (void)beepAdded;
 - (void)beepMode:(int)mode;
 @end
 

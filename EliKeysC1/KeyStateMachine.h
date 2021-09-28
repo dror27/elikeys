@@ -13,6 +13,7 @@
 @interface KeyStateMachine : NSObject
 -(KeyStateMachine*)initWith:(ViewController*)viewController;
 -(void)process:(int)buttonIndex With:(int)op;
+-(void)resetMode;
 @end
 
 

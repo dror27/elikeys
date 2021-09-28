@@ -76,6 +76,7 @@
 /* Begin PBXFileReference section */
 		E21AD30A26F87C2500A4263E /* KeyStateMachine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyStateMachine.m; sourceTree = "<group>"; };
 		E21AD30C26F87CDD00A4263E /* KeyStateMachine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyStateMachine.h; sourceTree = "<group>"; };
+		E22F6F312702F064005BE023 /* EliKeysC1.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EliKeysC1.entitlements; sourceTree = "<group>"; };
 		E2CDC55626F76BAA00A29053 /* MIKMIDI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MIKMIDI.xcodeproj; path = Frameworks/MIKMIDI/Framework/MIKMIDI.xcodeproj; sourceTree = "<group>"; };
 		E2CED39626F50B19004B7DD5 /* EliKeysC1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EliKeysC1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2CED39926F50B19004B7DD5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -165,6 +166,7 @@
 		E2CED39826F50B19004B7DD5 /* EliKeysC1 */ = {
 			isa = PBXGroup;
 			children = (
+				E22F6F312702F064005BE023 /* EliKeysC1.entitlements */,
 				E2CED39926F50B19004B7DD5 /* AppDelegate.h */,
 				E2CED39A26F50B19004B7DD5 /* AppDelegate.m */,
 				E2CED39C26F50B19004B7DD5 /* SceneDelegate.h */,
@@ -536,6 +538,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = EliKeysC1/EliKeysC1.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5MBEMM8VZS;
 				INFOPLIST_FILE = EliKeysC1/Info.plist;
@@ -545,6 +548,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.drorkessler.EliKeysC1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -554,6 +558,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = EliKeysC1/EliKeysC1.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5MBEMM8VZS;
 				INFOPLIST_FILE = EliKeysC1/Info.plist;
@@ -563,6 +568,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.drorkessler.EliKeysC1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

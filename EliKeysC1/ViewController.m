@@ -10,6 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "KeyStateMachine.h"
 #import <MIKMIDI/MIKMIDI.h>
+#import "DBConnection.h"
 
 #define SHOW_VOICES     1
 #define SHOW_MIDI       1
@@ -21,6 +22,7 @@
 @property (nonatomic) AVSpeechSynthesisVoice* voice;
 @property (nonatomic) AVSpeechSynthesizer* synth;
 @property (nonatomic) KeyStateMachine* ksm;
+@property (nonatomic) DBConnection* dbc;
 
 @property int midiCommandCounter;
 @property int noteOnKey;
@@ -174,6 +176,9 @@
     // start timer
     NSTimer*     timer = [NSTimer timerWithTimeInterval:0.2 target:self selector:@selector(timerMethod) userInfo:nil repeats:TRUE];
     [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+    
+    // open database
+    _dbc = [DBConnection sharedConnection];
 }
 
 - (void)display:(NSString*)text {

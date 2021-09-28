@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		E21AD30B26F87C2500A4263E /* KeyStateMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = E21AD30A26F87C2500A4263E /* KeyStateMachine.m */; };
+		E22F6F34270342EB005BE023 /* words.db in Resources */ = {isa = PBXBuildFile; fileRef = E22F6F33270342EB005BE023 /* words.db */; };
+		E22F6F36270343F1005BE023 /* DBConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = E22F6F35270343F1005BE023 /* DBConnection.m */; };
 		E2CDC56426F76C3F00A29053 /* MIKMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2CDC56026F76BAA00A29053 /* MIKMIDI.framework */; };
 		E2CDC56526F76C3F00A29053 /* MIKMIDI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E2CDC56026F76BAA00A29053 /* MIKMIDI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E2CED39B26F50B19004B7DD5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E2CED39A26F50B19004B7DD5 /* AppDelegate.m */; };
@@ -77,6 +79,9 @@
 		E21AD30A26F87C2500A4263E /* KeyStateMachine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyStateMachine.m; sourceTree = "<group>"; };
 		E21AD30C26F87CDD00A4263E /* KeyStateMachine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyStateMachine.h; sourceTree = "<group>"; };
 		E22F6F312702F064005BE023 /* EliKeysC1.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EliKeysC1.entitlements; sourceTree = "<group>"; };
+		E22F6F33270342EB005BE023 /* words.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = words.db; sourceTree = "<group>"; };
+		E22F6F35270343F1005BE023 /* DBConnection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DBConnection.m; sourceTree = "<group>"; };
+		E22F6F3727034409005BE023 /* DBConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DBConnection.h; sourceTree = "<group>"; };
 		E2CDC55626F76BAA00A29053 /* MIKMIDI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MIKMIDI.xcodeproj; path = Frameworks/MIKMIDI/Framework/MIKMIDI.xcodeproj; sourceTree = "<group>"; };
 		E2CED39626F50B19004B7DD5 /* EliKeysC1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EliKeysC1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2CED39926F50B19004B7DD5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -124,6 +129,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E22F6F32270342B5005BE023 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E22F6F33270342EB005BE023 /* words.db */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		E2CDC55726F76BAA00A29053 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -166,6 +179,7 @@
 		E2CED39826F50B19004B7DD5 /* EliKeysC1 */ = {
 			isa = PBXGroup;
 			children = (
+				E22F6F32270342B5005BE023 /* Resources */,
 				E22F6F312702F064005BE023 /* EliKeysC1.entitlements */,
 				E2CED39926F50B19004B7DD5 /* AppDelegate.h */,
 				E2CED39A26F50B19004B7DD5 /* AppDelegate.m */,
@@ -180,6 +194,8 @@
 				E2CED3AB26F50B1A004B7DD5 /* main.m */,
 				E21AD30A26F87C2500A4263E /* KeyStateMachine.m */,
 				E21AD30C26F87CDD00A4263E /* KeyStateMachine.h */,
+				E22F6F35270343F1005BE023 /* DBConnection.m */,
+				E22F6F3727034409005BE023 /* DBConnection.h */,
 			);
 			path = EliKeysC1;
 			sourceTree = "<group>";
@@ -338,6 +354,7 @@
 				E2CED3A926F50B1A004B7DD5 /* LaunchScreen.storyboard in Resources */,
 				E2CED3A626F50B1A004B7DD5 /* Assets.xcassets in Resources */,
 				E2CED3A426F50B19004B7DD5 /* Main.storyboard in Resources */,
+				E22F6F34270342EB005BE023 /* words.db in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,6 +380,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2CED3A126F50B19004B7DD5 /* ViewController.m in Sources */,
+				E22F6F36270343F1005BE023 /* DBConnection.m in Sources */,
 				E2CED39B26F50B19004B7DD5 /* AppDelegate.m in Sources */,
 				E2CED3AC26F50B1A004B7DD5 /* main.m in Sources */,
 				E2CED39E26F50B19004B7DD5 /* SceneDelegate.m in Sources */,

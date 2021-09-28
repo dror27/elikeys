@@ -34,6 +34,7 @@
 
 - (void)midiCommands:(NSArray<MIKMIDICommand *> *)commands;
 - (int)midiNoteToKeyInedex:(int)note;
+- (void)timerMethod;
 
 @end
 
@@ -67,11 +68,11 @@
                     _topNoteVelocity = velocity;
                     _noteOnTimestamp = [c timestamp];
                 } else if ( !_ignoreNextNoteOff ) {
+                    _ignoreNextNoteOff = TRUE;
                     _topNoteVelocity = MAX(_topNoteVelocity, velocity);
                     if ( _addByTimestamp ) {
                         NSTimeInterval      interval = [[c timestamp] timeIntervalSinceDate:_noteOnTimestamp];
-                        double              threshold = _velocityThreshold / (double)127 * 2;
-                        if ( interval > threshold ) {
+                        if ( interval > _secondsThreshold ) {
                             [_ksm process:key With:1];
                         }
                     } else {
@@ -114,6 +115,15 @@
     }
 }
 
+- (void)timerMethod {
+    if ( _addByTimestamp && !_ignoreNextNoteOff ) {
+        NSTimeInterval      interval = [[NSDate now] timeIntervalSinceDate:_noteOnTimestamp];
+        if ( interval > _secondsThreshold ) {
+            _ignoreNextNoteOff = TRUE;
+            [_ksm process:_noteOnKey With:1];
+        }
+    }
+}
 
 
 - (void)viewDidLoad {
@@ -123,6 +133,7 @@
     _velocityThreshold = 50;
     _secondsThreshold = 0.75;
     _addByTimestamp = TRUE;
+    _ignoreNextNoteOff = TRUE;
 
     // create key machine
     _ksm = [[KeyStateMachine alloc] initWith:self];
@@ -138,42 +149,6 @@
     _synth = [[AVSpeechSynthesizer alloc] init];
     
     // list midi devices
-    if ( SHOW_MIDI ) {
-        ItemCount     count = MIDIGetNumberOfDevices();
-        for ( int n = 0 ; n < count ; n++ ) {
-            MIDIDeviceRef   dev = MIDIGetDevice(n);
-            NSLog(@"MIDI Device %d: %u", n, (unsigned int)dev);
-            ItemCount       ecount = MIDIDeviceGetNumberOfEntities(dev);
-            for ( int m = 0 ; m < ecount ; m++ ) {
-                MIDIEntityRef   ent = MIDIDeviceGetEntity(dev, m);
-                NSLog(@"MIDI Entity %d: %u", m, (unsigned int)ent);
-            }
-        }
-        count = MIDIGetNumberOfExternalDevices();
-        for ( int n = 0 ; n < count ; n++ ) {
-            MIDIDeviceRef   dev = MIDIGetExternalDevice(n);
-            NSLog(@"MIDI External Device %d: %u", n, (unsigned int)dev);
-            ItemCount       ecount = MIDIDeviceGetNumberOfEntities(dev);
-            for ( int m = 0 ; m < ecount ; m++ ) {
-                MIDIEntityRef   ent = MIDIDeviceGetEntity(dev, m);
-                NSLog(@"MIDI Entity %d: %u", m, (unsigned int)ent);
-            }
-        }
-        
-        count = MIDIGetNumberOfSources();
-        for ( int n = 0 ; n < count ; n++ ) {
-            MIDIEndpointRef   endp = MIDIGetSource(n);
-            NSLog(@"MIDI Endpoint %d: %u", n, (unsigned int)endp);
-        }
-    }
-    
-    /*
-    MIDIClientRef     clientRef;
-    MIDIClientCreateWithBlock(@"Client", &clientRef, ^ (const MIDINotification *message) {
-        NSLog(@"message: %@", message);
-    });
-     */
-    
     MIDINetworkSession* session = [MIDINetworkSession defaultSession];
     session.enabled = YES;
     session.connectionPolicy = MIDINetworkConnectionPolicy_Anyone;
@@ -183,14 +158,6 @@
     NSError                    *error;
     NSLog(@"devs: %@", devs);
     for ( MIKMIDIDevice* dev in devs ) {
-        NSLog(@"dev: %@", dev);
-        /*
-        id  tok = [dm connectDevice:dev error:&error eventHandler:^(MIKMIDISourceEndpoint * _Nonnull source, NSArray<MIKMIDICommand *> * _Nonnull commands) {
-            NSLog(@"source: %@, commands: %@", source,  commands);
-        }];
-        NSLog(@"error: %@", error);
-        NSLog(@"tok: %@", tok);
-         */
         for ( MIKMIDIEntity* ent in [dev entities] ) {
             NSLog(@"ent: %@", ent);
             for ( MIKMIDIEndpoint* ep in [ent sources] ) {
@@ -204,6 +171,9 @@
         }
     }
     
+    // start timer
+    NSTimer*     timer = [NSTimer timerWithTimeInterval:0.2 target:self selector:@selector(timerMethod) userInfo:nil repeats:TRUE];
+    [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
 }
 
 - (void)display:(NSString*)text {
@@ -249,7 +219,6 @@
     }
     return 0;
 }
-
 
 
 @end

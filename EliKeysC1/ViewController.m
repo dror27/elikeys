@@ -37,6 +37,8 @@
 - (void)midiCommands:(NSArray<MIKMIDICommand *> *)commands;
 - (int)midiNoteToKeyInedex:(int)note;
 - (void)timerMethod;
+- (void)testDb;
+- (NSArray<NSString*>*)queryCompletionsFor:(NSString*)prefix;
 
 @end
 
@@ -179,6 +181,8 @@
     
     // open database
     _dbc = [DBConnection sharedConnection];
+    [self testDb];
+    [self queryCompletionsFor:@"של"];
 }
 
 - (void)display:(NSString*)text {
@@ -225,5 +229,16 @@
     return 0;
 }
 
+- (void)testDb {
+    NSMutableArray*    results = [DBConnection fetchResults:@"select word,freq from words limit 1"];
+    for ( NSDictionary* obj in results ) {
+        //NSString*       word = [obj objectForKey:@"word"];
+        NSLog(@"obj: %@", obj);
+    }
+}
+
+- (NSArray<NSString*>*)queryCompletionsFor:(NSString*)prefix {
+    return nil;
+}
 
 @end

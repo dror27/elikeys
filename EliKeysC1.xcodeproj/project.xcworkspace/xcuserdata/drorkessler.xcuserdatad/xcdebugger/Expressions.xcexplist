@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "-[ViewController midiCommands:]:ViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[ViewController testDb]:ViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[obj objectForKey:@&quot;word&quot;]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

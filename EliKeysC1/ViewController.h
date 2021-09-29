@@ -15,5 +15,6 @@
 - (void)beepClear;
 - (void)beepAdded;
 - (void)beepMode:(int)mode;
+- (NSArray<NSString*>*)queryCompletionsFor:(NSString*)prefix;
 @end
 

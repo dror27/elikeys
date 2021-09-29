@@ -38,7 +38,7 @@
 - (int)midiNoteToKeyInedex:(int)note;
 - (void)timerMethod;
 - (void)testDb;
-- (NSArray<NSString*>*)queryCompletionsFor:(NSString*)prefix;
+- (void)updateStatus;
 
 @end
 
@@ -46,15 +46,22 @@
 
 
 - (IBAction)buttonDown:(UIButton *)sender {
-    [_ksm process:[sender.titleLabel.text intValue] With:0];
+    if ( [sender.titleLabel.text isEqualToString:@"C"] ) {
+        [_ksm complete];
+    } else {
+        [_ksm process:[sender.titleLabel.text intValue] With:0];
+    }
 }
 - (IBAction)buttonUpInside:(UIButton *)sender {
-    [_ksm process:[sender.titleLabel.text intValue] With:1];
+    if ( [sender.titleLabel.text isEqualToString:@"C"] ) {
+        
+    } else {
+        [_ksm process:[sender.titleLabel.text intValue] With:1];
+    }
 }
 
 - (void)midiCommands:(NSArray<MIKMIDICommand *> *)commands {
     _midiCommandCounter += [commands count];
-    //_status.text = [NSString stringWithFormat:@"midi commands: %d",_midiCommandCounter];
     
     for ( MIKMIDICommand* cmd in commands ) {
         MIKMIDICommandType ct = [cmd commandType];
@@ -103,11 +110,11 @@
             NSLog(@"ControlChange: %ld, %ld", [c controllerNumber], [c controllerValue]);
             if ( [c controllerNumber] == 11 ) {
                 _velocityThreshold = (int)[c controllerValue];
-                _status.text = [NSString stringWithFormat:@"%d, mode: %@", _velocityThreshold, _addByTimestamp ? @"Time" : @"Pressure"];
+                [self updateStatus];
             } else if ( [c controllerNumber] == 10 ) {
                 _secondsThreshold = (int)[c controllerValue] / (double)127 * 2;
                 _addByTimestamp = [c controllerValue] != 127;
-                _status.text = [NSString stringWithFormat:@"%f, mode: %@", _secondsThreshold, _addByTimestamp ? @"Time" : @"Pressure"];
+                [self updateStatus];
             } else if ( [c controllerNumber] == 22 ) {
                 if ( [c controllerValue] == 127 ) {
                     [_ksm resetMode];
@@ -183,6 +190,8 @@
     _dbc = [DBConnection sharedConnection];
     [self testDb];
     [self queryCompletionsFor:@"של"];
+    
+    [self updateStatus];
 }
 
 - (void)display:(NSString*)text {
@@ -205,6 +214,8 @@
 }
 
 - (void)speak:(NSString*)text {
+    
+    text = [text stringByReplacingOccurrencesOfString:@"-" withString:@" "];
     
     AVSpeechUtterance*   utterance = [AVSpeechUtterance speechUtteranceWithString:text];
     
@@ -232,13 +243,27 @@
 - (void)testDb {
     NSMutableArray*    results = [DBConnection fetchResults:@"select word,freq from words limit 1"];
     for ( NSDictionary* obj in results ) {
-        //NSString*       word = [obj objectForKey:@"word"];
         NSLog(@"obj: %@", obj);
     }
 }
 
 - (NSArray<NSString*>*)queryCompletionsFor:(NSString*)prefix {
-    return nil;
+    
+    NSString*           query = [NSString stringWithFormat:@"select word,freq from words where word like '%@%%' and word != '%@' order by freq desc limit 12", prefix, prefix];
+    NSLog(@"query: %@", query);
+    NSMutableArray*    results = [DBConnection fetchResults:query];
+    NSMutableArray*    words = [[NSMutableArray alloc] init];
+    for ( NSDictionary* obj in results ) {
+        NSString*       word = [obj objectForKey:@"word"];
+        NSLog(@"word: %@", word);
+        [words addObject:word];
+    }
+    return words;
 }
 
+- (void)updateStatus {
+    _status.text = [NSString stringWithFormat:@"T:%.1f P:%d, %@ Mode",
+                    _secondsThreshold, _velocityThreshold,
+                    _addByTimestamp ? @"Time" : @"Pressure"];
+}
 @end

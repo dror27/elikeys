@@ -11,6 +11,8 @@
 @interface KeyStateMachine ()
 @property (weak, nonatomic) ViewController *viewController;
 @property (nonatomic) NSMutableString *acc;
+@property (nonatomic) NSArray<NSString*>* completionWords;
+@property int completionPage;
 
 -(void)speakAcc;
 -(NSString*)prepForSpeech:(NSString*)text;
@@ -37,6 +39,9 @@ NSString        *modeSpeechText[3] = {
     if (self) {
         _viewController = viewController;
         _acc = [[NSMutableString alloc] init];
+        
+        _completionWords = nil;
+        _completionPage = 0;
     }
     return self;
 }
@@ -49,6 +54,7 @@ NSString        *modeSpeechText[3] = {
     }
     
     // keys 1-12 are letters
+    _completionWords = nil;
     if ( buttonIndex >= 1 && buttonIndex <= 12 ) {
         NSString*   letter = [NSString stringWithFormat:@"%C", [letterKeys[letterMode] characterAtIndex:buttonIndex - 1]];
         [_acc appendString:letter];
@@ -57,6 +63,7 @@ NSString        *modeSpeechText[3] = {
         [_viewController beepAdded];
         
     } else if ( buttonIndex == 16 ) {
+        letterMode = 0;
         [_acc setString:@""];
         [_viewController display:_acc];
         [_viewController beepClear];
@@ -137,5 +144,41 @@ NSString        *modeSpeechText[3] = {
         return @"";
     }
 }
+
+-(void)complete {
+    
+    if ( _completionWords == nil ) {
+    
+        // extract last uncompleted word from accumulator
+        NSString*       lastWord = [[_acc componentsSeparatedByString:@" "] lastObject];
+        if ( lastWord == nil || [lastWord isEqualToString:@""] ) {
+            [_viewController beep];
+            return;
+        }
+        
+        // query words
+        _completionWords = [_viewController queryCompletionsFor:lastWord];
+        _completionPage = 0;
+    } else {
+        _completionPage += 1;
+        if ( _completionPage * 4 >= [_completionWords count] ) {
+            _completionPage = 0;
+        }
+    }
+    
+    // speak page
+    [self speakCompletionPage];
+}
+
+-(void)speakCompletionPage {
+    
+    // get words to speak
+    for ( int i = _completionPage * 4 ; i < _completionPage * 4 + 4 ; i++ ) {
+        if ( i < [_completionWords count] ) {
+            [_viewController speak:[_completionWords objectAtIndex:i]];
+        }
+    }
+}
+
 @end
 

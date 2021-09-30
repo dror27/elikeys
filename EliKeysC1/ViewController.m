@@ -226,6 +226,8 @@
     utterance.volume = 0.8;
     
     
+    [_synth stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
+    [_synth continueSpeaking];
     [_synth speakUtterance:utterance];
 }
 

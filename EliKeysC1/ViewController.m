@@ -117,7 +117,7 @@
                 [self updateStatus];
             } else if ( [c controllerNumber] == 22 ) {
                 if ( [c controllerValue] == 127 ) {
-                    [_ksm resetMode];
+                    [_ksm complete];
                 }
             }
         } else {
@@ -196,7 +196,7 @@
 
 - (void)display:(NSString*)text {
     NSLog(@"display: %@", text);
-    [_label setText:text];
+    [_label setText:[text stringByReplacingOccurrencesOfString:@" " withString:@"_"]];
 }
 
 - (void)beep {
@@ -226,8 +226,6 @@
     utterance.volume = 0.8;
     
     
-    [_synth stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
-    [_synth continueSpeaking];
     [_synth speakUtterance:utterance];
 }
 

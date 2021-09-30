@@ -12,7 +12,6 @@
 @property (weak, nonatomic) ViewController *viewController;
 @property (nonatomic) NSMutableString *acc;
 @property (nonatomic) NSArray<NSString*>* completionWords;
-@property int completionPage;
 
 -(void)speakAcc;
 -(NSString*)prepForSpeech:(NSString*)text;
@@ -41,7 +40,7 @@ NSString        *modeSpeechText[3] = {
         _acc = [[NSMutableString alloc] init];
         
         _completionWords = nil;
-        _completionPage = 0;
+        [_viewController display:_acc];
     }
     return self;
 }
@@ -49,22 +48,41 @@ NSString        *modeSpeechText[3] = {
 - (void)process:(int)buttonIndex With:(int)op {
     NSLog(@"process: %d (%d)", buttonIndex, op);
     if ( op == 0 ) {
-        [_viewController speak:[self buttonDiscoverySpokenText:buttonIndex]];
+        if ( _completionWords == nil || buttonIndex > 12 ) {
+            [_viewController speak:[self buttonDiscoverySpokenText:buttonIndex]];
+        } else {
+            [self speakCompletionWordAtKey:buttonIndex];
+        }
         return;
     }
     
     // keys 1-12 are letters
-    _completionWords = nil;
     if ( buttonIndex >= 1 && buttonIndex <= 12 ) {
-        NSString*   letter = [NSString stringWithFormat:@"%C", [letterKeys[letterMode] characterAtIndex:buttonIndex - 1]];
-        [_acc appendString:letter];
-        [_viewController display:_acc];
-        //[self speakAcc];
-        [_viewController beepAdded];
+        if ( _completionWords == nil ) {
+            NSString*   letter = [NSString stringWithFormat:@"%C", [letterKeys[letterMode] characterAtIndex:buttonIndex - 1]];
+            [_acc appendString:letter];
+            [_viewController display:_acc];
+            //[self speakAcc];
+            [_viewController beepAdded];
+        } else {
+            NSString* word = [self completionWordAtKey:buttonIndex];
+            if ( word != nil ) {
+                NSString*   lastWord = [self completeLastWord];
+                NSString*   suffix = [word substringFromIndex:[lastWord length]];
+                [_acc appendString:suffix];
+                [_acc appendString:@" "];
+                [_viewController display:_acc];
+                [_viewController beepAdded];
+            } else {
+                [_viewController beep];
+            }
+            _completionWords = nil;
+        }
         
     } else if ( buttonIndex == 16 ) {
         letterMode = 0;
         [_acc setString:@""];
+        _completionWords = nil;
         [_viewController display:_acc];
         [_viewController beepClear];
     } else if ( buttonIndex == 15 ) {
@@ -74,8 +92,13 @@ NSString        *modeSpeechText[3] = {
         }
         [self speakAcc];
     } else if ( buttonIndex == 14 ) {
-        letterMode = (letterMode + 1) % 3;
-        [_viewController speak:modeSpeechText[letterMode]];
+        if ( _completionWords == nil ) {
+            letterMode = (letterMode + 1) % 3;
+            [_viewController speak:modeSpeechText[letterMode]];
+        } else {
+            _completionWords = nil;
+            [_viewController beep];
+        }
     } else if ( buttonIndex == 13 ) {
         [self speakAcc];
     }
@@ -150,33 +173,63 @@ NSString        *modeSpeechText[3] = {
     if ( _completionWords == nil ) {
     
         // extract last uncompleted word from accumulator
-        NSString*       lastWord = [[_acc componentsSeparatedByString:@" "] lastObject];
-        if ( lastWord == nil || [lastWord isEqualToString:@""] ) {
+        NSString*       lastWord = [self completeLastWord];
+        if ( lastWord == nil ) {
             [_viewController beep];
             return;
         }
         
         // query words
         _completionWords = [_viewController queryCompletionsFor:lastWord];
-        _completionPage = 0;
-    } else {
-        _completionPage += 1;
-        if ( _completionPage * 4 >= [_completionWords count] ) {
-            _completionPage = 0;
+        if ( [_completionWords count] == 0 ) {
+            _completionWords = nil;
+            [_viewController beep];
         }
+    } else {
+        _completionWords = nil;
+        [_viewController beep];
     }
     
     // speak page
     [self speakCompletionPage];
 }
 
+-(NSString*)completeLastWord {
+    NSString*       lastWord = [[_acc componentsSeparatedByString:@" "] lastObject];
+    if ( lastWord == nil || [lastWord isEqualToString:@""] ) {
+        return nil;
+    } else {
+        return lastWord;
+    }
+}
+
 -(void)speakCompletionPage {
     
     // get words to speak
-    for ( int i = _completionPage * 4 ; i < _completionPage * 4 + 4 ; i++ ) {
+    NSMutableString*    text = [NSMutableString stringWithFormat:@""];
+    for ( int i = 0 ; i <  4 ; i++ ) {
         if ( i < [_completionWords count] ) {
-            [_viewController speak:[_completionWords objectAtIndex:i]];
+            [text appendFormat:@"%@,", [_completionWords objectAtIndex:i]];
         }
+    }
+    [_viewController speak:text];
+}
+
+-(void)speakCompletionWordAtKey:(int)key {
+    NSString*       word = [self completionWordAtKey:key];
+    if ( word != nil ) {
+        [_viewController speak:word];
+    } else {
+        [_viewController beep];
+    }
+}
+
+-(NSString*)completionWordAtKey:(int)key {
+    int     i = (key - 1);
+    if ( i < [_completionWords count] ) {
+        return [_completionWords objectAtIndex:i];
+    } else {
+        return nil;
     }
 }
 

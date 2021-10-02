@@ -13,8 +13,10 @@
 @interface KeyStateMachine : NSObject
 -(KeyStateMachine*)initWith:(ViewController*)viewController;
 -(void)process:(int)buttonIndex With:(int)op;
+-(void)shift:(int)v;
 -(void)resetMode;
 -(void)complete;
+-(NSString*)status;
 @end
 
 

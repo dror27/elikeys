@@ -38,7 +38,6 @@
 - (int)midiNoteToKeyInedex:(int)note;
 - (void)timerMethod;
 - (void)testDb;
-- (void)updateStatus;
 
 @end
 
@@ -119,6 +118,8 @@
                 if ( [c controllerValue] == 127 ) {
                     [_ksm complete];
                 }
+            } else if ( [c controllerNumber] == 1 ) {
+                [_ksm shift:(int)[c controllerValue]];
             }
         } else {
             NSLog(@"0x%lx", (unsigned long)ct);
@@ -262,7 +263,8 @@
 }
 
 - (void)updateStatus {
-    _status.text = [NSString stringWithFormat:@"T:%.1f P:%d, %@ Mode",
+    _status.text = [NSString stringWithFormat:@"%@ T:%.1f P:%d, %@ Mode",
+                    [_ksm status],
                     _secondsThreshold, _velocityThreshold,
                     _addByTimestamp ? @"Time" : @"Pressure"];
 }

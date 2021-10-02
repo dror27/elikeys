@@ -12,6 +12,7 @@
 @property (weak, nonatomic) ViewController *viewController;
 @property (nonatomic) NSMutableString *acc;
 @property (nonatomic) NSArray<NSString*>* completionWords;
+@property int lastShift;
 
 -(void)speakAcc;
 -(NSString*)prepForSpeech:(NSString*)text;
@@ -93,8 +94,12 @@ NSString        *modeSpeechText[3] = {
         [self speakAcc];
     } else if ( buttonIndex == 14 ) {
         if ( _completionWords == nil ) {
-            letterMode = (letterMode + 1) % 3;
+            if ( letterMode != 2 )
+                letterMode = 2;
+            else
+                [self shift:-1];
             [_viewController speak:modeSpeechText[letterMode]];
+            [_viewController updateStatus];
         } else {
             _completionWords = nil;
             [_viewController beep];
@@ -102,6 +107,14 @@ NSString        *modeSpeechText[3] = {
     } else if ( buttonIndex == 13 ) {
         [self speakAcc];
     }
+}
+
+-(void)shift:(int)v {
+    if ( v >= 0 ) {
+        _lastShift = v;
+    }
+    letterMode = (_lastShift < 64) ? 0 : 1;
+    [_viewController updateStatus];
 }
 
 -(void)resetMode {
@@ -231,6 +244,10 @@ NSString        *modeSpeechText[3] = {
     } else {
         return nil;
     }
+}
+
+-(NSString*)status {
+    return [NSString stringWithFormat:@"P:%d", letterMode];
 }
 
 @end

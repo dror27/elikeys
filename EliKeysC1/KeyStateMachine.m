@@ -9,9 +9,10 @@
 #import "KeyStateMachine.h"
 
 @interface KeyStateMachine ()
-@property (weak, nonatomic) ViewController *viewController;
-@property (nonatomic) NSMutableString *acc;
-@property (nonatomic) NSArray<NSString*>* completionWords;
+@property ViewController *viewController;
+@property NSMutableString *acc;
+@property NSArray<NSString*>* completionWords;
+@property int lastLetterMode;
 @property int lastShift;
 
 -(void)speakAcc;
@@ -81,7 +82,7 @@ NSString        *modeSpeechText[3] = {
         }
         
     } else if ( buttonIndex == 16 ) {
-        letterMode = 0;
+        [self shift:-1];
         [_acc setString:@""];
         _completionWords = nil;
         [_viewController display:_acc];
@@ -94,9 +95,9 @@ NSString        *modeSpeechText[3] = {
         [self speakAcc];
     } else if ( buttonIndex == 14 ) {
         if ( _completionWords == nil ) {
-            if ( letterMode != 2 )
+            if ( letterMode != 2 ) {
                 letterMode = 2;
-            else
+            } else
                 [self shift:-1];
             [_viewController speak:modeSpeechText[letterMode]];
             [_viewController updateStatus];
@@ -111,14 +112,16 @@ NSString        *modeSpeechText[3] = {
 
 -(void)shift:(int)v {
     if ( v >= 0 ) {
+        letterMode = (v > _lastShift) ? 1 : 0;
         _lastShift = v;
+    } else {
+        letterMode = _lastLetterMode;
     }
-    letterMode = (_lastShift < 64) ? 0 : 1;
     [_viewController updateStatus];
 }
 
 -(void)resetMode {
-    letterMode = 0;
+    [self shift:-1];
     [_viewController speak:modeSpeechText[letterMode]];
 }
 
@@ -222,7 +225,7 @@ NSString        *modeSpeechText[3] = {
     NSMutableString*    text = [NSMutableString stringWithFormat:@""];
     for ( int i = 0 ; i <  4 ; i++ ) {
         if ( i < [_completionWords count] ) {
-            [text appendFormat:@"%@,", [_completionWords objectAtIndex:i]];
+            [text appendFormat:@"%@. ", [_completionWords objectAtIndex:i]];
         }
     }
     [_viewController speak:text];

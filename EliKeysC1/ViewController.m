@@ -19,10 +19,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *label;
 @property (weak, nonatomic) IBOutlet UILabel *status;
 
-@property (nonatomic) AVSpeechSynthesisVoice* voice;
-@property (nonatomic) AVSpeechSynthesizer* synth;
-@property (nonatomic) KeyStateMachine* ksm;
-@property (nonatomic) DBConnection* dbc;
+@property AVSpeechSynthesisVoice* voice;
+@property AVSpeechSynthesizer* synth;
+@property KeyStateMachine* ksm;
+@property DBConnection* dbc;
 
 @property int midiCommandCounter;
 @property int noteOnKey;
@@ -77,6 +77,10 @@
                     [_ksm process:key With:0];
                     _topNoteVelocity = velocity;
                     _noteOnTimestamp = [c timestamp];
+                    if ( !_addByTimestamp && (_topNoteVelocity > _velocityThreshold) ) {
+                        [_ksm process:key With:1];
+                        _ignoreNextNoteOff = TRUE;
+                    }
                 } else if ( !_ignoreNextNoteOff ) {
                     _ignoreNextNoteOff = TRUE;
                     _topNoteVelocity = MAX(_topNoteVelocity, velocity);

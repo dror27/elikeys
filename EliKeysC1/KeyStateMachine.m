@@ -14,6 +14,7 @@
 @property NSArray<NSString*>* completionWords;
 @property int lastLetterMode;
 @property int lastShift;
+@property BOOL sliderShift;
 
 -(void)speakAcc;
 -(NSString*)prepForSpeech:(NSString*)text;
@@ -95,10 +96,14 @@ NSString        *modeSpeechText[3] = {
         [self speakAcc];
     } else if ( buttonIndex == 14 ) {
         if ( _completionWords == nil ) {
-            if ( letterMode != 2 ) {
-                letterMode = 2;
-            } else
-                [self shift:-1];
+            if ( _sliderShift ) {
+                if ( letterMode != 2 ) {
+                    letterMode = 2;
+                } else
+                    [self shift:-1];
+            } else {
+                letterMode = (letterMode + 1) % 3;
+            }
             [_viewController speak:modeSpeechText[letterMode]];
             [_viewController updateStatus];
         } else {
@@ -121,7 +126,11 @@ NSString        *modeSpeechText[3] = {
 }
 
 -(void)resetMode {
-    [self shift:-1];
+    if ( _sliderShift ) {
+        [self shift:-1];
+    } else {
+        letterMode = 0;
+    }
     [_viewController speak:modeSpeechText[letterMode]];
 }
 
@@ -250,7 +259,11 @@ NSString        *modeSpeechText[3] = {
 }
 
 -(NSString*)status {
-    return [NSString stringWithFormat:@"P:%d", letterMode];
+    return [NSString stringWithFormat:@"P:%d%@", letterMode, _sliderShift ? @"S" : @""];
+}
+
+-(void)changeSliderShift:(BOOL)v {
+    _sliderShift = v;
 }
 
 @end

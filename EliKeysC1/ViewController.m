@@ -29,6 +29,7 @@
 @property int topNoteVelocity;
 @property int velocityThreshold;
 @property double secondsThreshold;
+@property BOOL sliderShift;
 @property (nonatomic) NSDate* noteOnTimestamp;
 @property BOOL addByTimestamp;
 @property BOOL ignoreNextNoteOff;
@@ -113,17 +114,21 @@
             NSLog(@"ControlChange: %ld, %ld", [c controllerNumber], [c controllerValue]);
             if ( [c controllerNumber] == 11 ) {
                 _velocityThreshold = (int)[c controllerValue];
+                [[NSUserDefaults standardUserDefaults] setInteger:_velocityThreshold forKey:@"slider_p"];
                 [self updateStatus];
             } else if ( [c controllerNumber] == 10 ) {
                 _secondsThreshold = (int)[c controllerValue] / (double)127 * 2;
-                _addByTimestamp = [c controllerValue] != 127;
+                [[NSUserDefaults standardUserDefaults] setDouble:_secondsThreshold forKey:@"slider_t"];
+                _addByTimestamp = (_secondsThreshold < 1.95);
                 [self updateStatus];
             } else if ( [c controllerNumber] == 22 ) {
                 if ( [c controllerValue] == 127 ) {
                     [_ksm complete];
                 }
             } else if ( [c controllerNumber] == 1 ) {
-                [_ksm shift:(int)[c controllerValue]];
+                if ( _sliderShift ) {
+                    [_ksm shift:(int)[c controllerValue]];
+                }
             }
         } else {
             NSLog(@"0x%lx", (unsigned long)ct);
@@ -196,6 +201,12 @@
     [self testDb];
     [self queryCompletionsFor:@"של"];
     
+    // get defaults
+    [self readUserDefaults];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(defaultsChanged:) name:NSUserDefaultsDidChangeNotification object:nil];
+    
+    
+    // upadte status
     [self updateStatus];
 }
 
@@ -271,5 +282,22 @@
                     [_ksm status],
                     _secondsThreshold, _velocityThreshold,
                     _addByTimestamp ? @"Time" : @"Pressure"];
+}
+
+- (void)defaultsChanged:(NSNotification *)notification {
+    
+    [self readUserDefaults];
+    [self updateStatus];
+}
+
+-(void)readUserDefaults {
+    
+    NSLog(@"readUserDefaults: %@", [[NSUserDefaults standardUserDefaults] dictionaryRepresentation]);
+    
+    _velocityThreshold = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"slider_p"];
+    _secondsThreshold = [[NSUserDefaults standardUserDefaults] doubleForKey:@"slider_t"];
+    _sliderShift = [[NSUserDefaults standardUserDefaults] boolForKey:@"switch_shift"];
+    _addByTimestamp = (_secondsThreshold < 1.95);
+    [_ksm changeSliderShift:_sliderShift];
 }
 @end

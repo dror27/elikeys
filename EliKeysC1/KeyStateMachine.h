@@ -17,6 +17,7 @@
 -(void)resetMode;
 -(void)complete;
 -(NSString*)status;
+-(void)changeSliderShift:(BOOL)v;
 @end
 
 

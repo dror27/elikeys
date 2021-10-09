@@ -11,12 +11,16 @@
 #import "PredictionTypingMachine.h"
 #import "DBConnection.h"
 
+#define SUGGEST_COUNT       4
+#define LONG_PRESS_SECS     1.0
+#define SOFTBANK_COUNT      4
 
 @interface ViewController ()
 @property AVSpeechSynthesisVoice* voice;
 @property AVSpeechSynthesizer* synth;
 @property PredictionTypingMachine* ptm;
 @property NSArray<NSString*>* suggestions;
+@property NSMutableArray<NSString*>* softbanks;
 @end
 
 @implementation ViewController
@@ -26,23 +30,64 @@
     
     [self testDb];
     [self loadVoice];
-    [self setPtm:[[PredictionTypingMachine alloc] init]];
+    [self setPtm:[[PredictionTypingMachine alloc] initWith:SUGGEST_COUNT]];
     [self reset];
+    
+    [self setSoftbanks:[NSMutableArray array]];
+    for ( int n = 0 ; n < SOFTBANK_COUNT ; n++ ) {
+        [_softbanks addObject:@""];
+    }
+    
 }
 
-- (IBAction)buttonAction:(UIButton*)sender {
-    NSLog(@"sender: %@", sender.titleLabel.text);
+- (IBAction)keyTouchDown:(UIButton*)sender {
+    NSLog(@"keyTouchDown: %@", sender.titleLabel.text);
+    
+    [self performSelector:@selector(keyTimer:) withObject:sender afterDelay:LONG_PRESS_SECS];
+    sender.tag = 0;
+}
+
+- (IBAction)keyTouchUpInside:(UIButton*)sender {
+    if ( sender.tag == 0 ) {
+        NSLog(@"keyTouchUpInside: %@", sender.titleLabel.text);
+        
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(keyTimer:) object:sender];
+        
+        [self keyPress:sender.titleLabel.text];
+    }
+}
+
+- (void)keyTimer:(UIButton*)sender {
+    NSLog(@"keyTimer: %@", sender.titleLabel.text);
+    sender.tag = 1;
+    [self keyLongPress:sender.titleLabel.text];
+}
+
+-(void)keyPress:(NSString*)key {
+ 
     [self flushSpeechQueue];
-    if ( [sender.titleLabel.text isEqualToString:@"C"] ) {
+    if ( [key isEqualToString:@"C"] ) {
         [self reset];
-    } else if ( [sender.titleLabel.text isEqualToString:@"A"] ) {
+    } else if ( [key isEqualToString:@"A"] ) {
         [self announce];
-    } else if ( [sender.titleLabel.text isEqualToString:@"S"] ) {
+    } else if ( [key isEqualToString:@"S"] ) {
         [self space];
-    } else if ( [sender.titleLabel.text isEqualToString:@"N"] ) {
+    } else if ( [key isEqualToString:@"N"] ) {
         [self next];
+    } else if ( [key characterAtIndex:0] == 'B' ) {
+        [self bank:[key characterAtIndex:1] - '1'];
     } else {
-        [self key:[sender.titleLabel.text intValue] - 1];
+        [self key:[key intValue] - 1];
+    }
+}
+
+-(void)keyLongPress:(NSString*)key {
+    [self flushSpeechQueue];
+    
+    if ( [key characterAtIndex:0] == 'B' ) {
+        [self setBank:[key characterAtIndex:1] - '1'];
+    } else {
+        [self keyPress:key];
     }
 }
 
@@ -51,8 +96,11 @@
     [self setSynth:[[AVSpeechSynthesizer alloc] init]];
 }
 
--(void)beep {
+-(void)beepOK {
     AudioServicesPlaySystemSound(1003);
+}
+-(void)beepError {
+    AudioServicesPlaySystemSound(1004);
 }
 
 -(void)speak:(NSString*)text {
@@ -77,14 +125,12 @@
 }
 
 -(void)reset {
-    [_ptm clear];
-    [_ptm updateSuggestions];
-    [self setSuggestions:[_ptm nextSuggestionBlock:4]];
+    [self setSuggestions:[_ptm clear]];
     [self announce];
 }
 
 -(void)announce {
-    [self speak:[self prepForSpeech:[_ptm accumulatorAsString]]];
+    [self speak:[self prepareForSpeech:[_ptm text]]];
     if ( [_suggestions count] ) {
         [self speak:@"לבחירה"];
         for ( NSString* text in _suggestions ) {
@@ -96,12 +142,12 @@
 }
 
 -(void)space {
-    [_ptm appendSuggestion:@" "];
-    [self update];
+    [self setSuggestions:[_ptm append:@" "]];
+    [self announce];
 }
 
 -(void)next {
-    [self setSuggestions:[_ptm nextSuggestionBlock:4]];
+    [self setSuggestions:[_ptm next]];
     if ( [_suggestions count] ) {
         for ( NSString* text in _suggestions ) {
             [self speak:text];
@@ -114,31 +160,27 @@
 -(void)key:(int)keyIndex {
     if ( keyIndex < [_suggestions count] ) {;
         NSString*       s = [_suggestions objectAtIndex:keyIndex];
-        [_ptm appendSuggestion:s];
-        /*
-        if ( [s length] > 1 )
-            [self beep];
-        [_ptm updateSuggestions];
-        [self setSuggestions:[_ptm nextSuggestionBlock:4]];
-        if ( [_suggestions count] ) {
-            [self speak:@"לבחירה"];
-            for ( NSString* text in _suggestions ) {
-                [self speak:text];
-            }
-        } else {
-            [self speak:@"אין מה לבחור"];
-        }
-         */
-        [self update];
+        [self setSuggestions:[_ptm append:s]];
+        [self announce];
     } else {
-        [self beep];
+        [self beepError];
     }
 }
 
--(void)update {
-    [_ptm updateSuggestions];
-    [self setSuggestions:[_ptm nextSuggestionBlock:4]];
-    [self announce];
+- (void)bank:(int)bankIndex {
+    NSString*   text = [_softbanks objectAtIndex:bankIndex];
+    
+    if ( [text length] ) {
+        [self speak:[self prepareForSpeech:text]];
+    } else {
+        [self beepError];
+    }
+}
+
+- (void)setBank:(int)bankIndex {
+    NSString*    text = [NSString stringWithString:[_ptm text]];
+    [_softbanks setObject:text atIndexedSubscript:bankIndex];
+    [self beepOK];
 }
 
 - (void)testDb {
@@ -148,7 +190,7 @@
     }
 }
 
--(NSString*)prepForSpeech:(NSString*)text {
+-(NSString*)prepareForSpeech:(NSString*)text {
     
     NSMutableString*    result = [[NSMutableString alloc] init];
     NSUInteger          length = [text length];

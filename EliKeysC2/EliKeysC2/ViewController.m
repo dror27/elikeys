@@ -8,6 +8,7 @@
 #import "ViewController.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
+#import <MIKMIDI/MIKMIDI.h>
 #import "PredictionTypingMachine.h"
 #import "DBConnection.h"
 
@@ -30,6 +31,7 @@
     
     [self testDb];
     [self loadVoice];
+    [self loadMidi];
     [self setPtm:[[PredictionTypingMachine alloc] initWith:SUGGEST_COUNT]];
     [self reset];
     
@@ -94,6 +96,32 @@
 -(void)loadVoice {
     [self setVoice:[AVSpeechSynthesisVoice voiceWithLanguage:@"he-IL"]];
     [self setSynth:[[AVSpeechSynthesizer alloc] init]];
+}
+
+-(void)loadMidi {
+    
+    // list midi devices
+    MIDINetworkSession* session = [MIDINetworkSession defaultSession];
+    session.enabled = YES;
+    session.connectionPolicy = MIDINetworkConnectionPolicy_Anyone;
+    [MIDINetworkSession defaultSession].enabled = YES;
+    MIKMIDIDeviceManager* dm = [MIKMIDIDeviceManager sharedDeviceManager];
+    NSArray<MIKMIDIDevice*>*    devs = [dm availableDevices];
+    NSError                    *error;
+    NSLog(@"devs: %@", devs);
+    for ( MIKMIDIDevice* dev in devs ) {
+        for ( MIKMIDIEntity* ent in [dev entities] ) {
+            NSLog(@"ent: %@", ent);
+            for ( MIKMIDIEndpoint* ep in [ent sources] ) {
+                id tok1 = [dm connectInput:ep error:&error eventHandler:^(MIKMIDISourceEndpoint * _Nonnull source, NSArray<MIKMIDICommand *> * _Nonnull commands) {
+                    //NSLog(@"source: %@, commands: %@", source,  commands);
+                    [self performSelectorOnMainThread:@selector(midiCommands:) withObject:commands waitUntilDone:FALSE];
+                }];
+                NSLog(@"error: %@", error);
+                NSLog(@"tok: %@", tok1);
+            }
+        }
+    }
 }
 
 -(void)beepOK {
@@ -218,6 +246,31 @@
     NSLog(@"%@ -> %@", text, result);
     
     return result;
+}
+
+- (void)midiCommands:(NSArray<MIKMIDICommand *> *)commands {
+    
+    for ( MIKMIDICommand* cmd in commands ) {
+        MIKMIDICommandType ct = [cmd commandType];
+        if ( ct == MIKMIDICommandTypeNoteOn ) {
+            MIKMIDINoteCommand*           c = (MIKMIDINoteCommand*)cmd;
+            NSString*                    key = [self midiNoteToKey:(int)[c note]];
+            NSLog(@"key: %@", key);
+            
+            [self keyPress:key];
+        }
+    }
+}
+
+- (NSString*)midiNoteToKey:(int)note {
+    
+    int     i = 0;
+    for ( NSString* tok in [@"52,49,53,51,46,41,45,50,44,42,39,37,40,38,36,35" componentsSeparatedByString:@","] ) {
+        if ( [tok intValue] == note )
+            return [[@"1,2,3,4,N,A,S,C,B1,B2,B3,B4,?,?,?,?" componentsSeparatedByString:@","] objectAtIndex:i];
+        i++;
+    }
+    return nil;
 }
 
 

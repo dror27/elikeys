@@ -12,30 +12,30 @@
 #import "PredictionTypingMachine.h"
 #import "DBConnection.h"
 #import "ToneGenerator.h"
+#import "SpeechController.h"
+#import "MidiController.h"
 
 #define SUGGEST_COUNT       4
 #define LONG_PRESS_SECS     1.0
 
 @interface ViewController ()
-@property AVSpeechSynthesisVoice* voice;
-@property AVSpeechSynthesizer* synth;
+@property SpeechController* speech;
 @property PredictionTypingMachine* ptm;
 @property NSArray<NSString*>* suggestions;
 @property ToneGenerator* tones;
-@property NSDictionary<NSString*,NSString*>* midiNote2Key;
-@property NSMutableSet<NSString*>* midiIgnoreNoteOff;
+@property MidiController* midi;
 @end
 
 @implementation ViewController
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-    
+
+    [self setSpeech:[[SpeechController alloc] init]];
     [self setTones:[[ToneGenerator alloc] init]];
+    [self setMidi:[[MidiController alloc] initWith:self]];
     
     [self testDb];
-    [self loadVoice];
-    [self loadMidi];
     [self setPtm:[[PredictionTypingMachine alloc] initWith:SUGGEST_COUNT]];
     [self reset];
 }
@@ -65,7 +65,7 @@
 
 -(void)keyPress:(NSString*)key {
  
-    [self flushSpeechQueue];
+    [_speech flushSpeechQueue];
     if ( [key isEqualToString:@"C"] ) {
         [self backspace];
     } else if ( [key isEqualToString:@"A"] ) {
@@ -82,7 +82,7 @@
 }
 
 -(void)keyLongPress:(NSString*)key {
-    [self flushSpeechQueue];
+    [_speech flushSpeechQueue];
     
     if ( [key isEqualToString:@"C"] ) {
         [self reset];
@@ -95,44 +95,6 @@
     }
 }
 
--(void)loadVoice {
-    [self setVoice:[AVSpeechSynthesisVoice voiceWithLanguage:@"he-IL"]];
-    [self setSynth:[[AVSpeechSynthesizer alloc] init]];
-}
-
--(void)loadMidi {
-    
-    // initialize midi note to key mapping
-    [self setMidiNote2Key:[NSDictionary dictionaryWithObjectsAndKeys:
-                    @"1", @"52", @"2", @"49", @"3", @"53", @"4", @"51",
-                    @"N", @"46", @"A", @"41", @"S", @"45", @"C", @"50",
-                    @"B1", @"44", @"B2", @"42", @"B3", @"39", @"B4", @"37",
-                           @"B5", @"40", @"B6", @"38", @"B7", @"36", @"B8", @"35", nil]];
-    [self setMidiIgnoreNoteOff:[NSMutableSet set]];
-    
-    // list midi devices
-    MIDINetworkSession* session = [MIDINetworkSession defaultSession];
-    session.enabled = YES;
-    session.connectionPolicy = MIDINetworkConnectionPolicy_Anyone;
-    [MIDINetworkSession defaultSession].enabled = YES;
-    MIKMIDIDeviceManager* dm = [MIKMIDIDeviceManager sharedDeviceManager];
-    NSArray<MIKMIDIDevice*>*    devs = [dm availableDevices];
-    NSError                    *error;
-    NSLog(@"devs: %@", devs);
-    for ( MIKMIDIDevice* dev in devs ) {
-        for ( MIKMIDIEntity* ent in [dev entities] ) {
-            NSLog(@"ent: %@", ent);
-            for ( MIKMIDIEndpoint* ep in [ent sources] ) {
-                id tok1 = [dm connectInput:ep error:&error eventHandler:^(MIKMIDISourceEndpoint * _Nonnull source, NSArray<MIKMIDICommand *> * _Nonnull commands) {
-                    //NSLog(@"source: %@, commands: %@", source,  commands);
-                    [self performSelectorOnMainThread:@selector(midiCommands:) withObject:commands waitUntilDone:FALSE];
-                }];
-                NSLog(@"error: %@", error);
-                NSLog(@"tok: %@", tok1);
-            }
-        }
-    }
-}
 
 -(void)beepOK {
     AudioServicesPlaySystemSound(1003);
@@ -141,26 +103,6 @@
     AudioServicesPlaySystemSound(1004);
 }
 
--(void)speak:(NSString*)text {
-    
-    text = [text stringByReplacingOccurrencesOfString:@"-" withString:@" "];
-    
-    AVSpeechUtterance*   utterance = [AVSpeechUtterance speechUtteranceWithString:text];
-    
-    utterance.voice = _voice;
-    utterance.rate = 0.5;
-    utterance.pitchMultiplier = 0.8;
-    utterance.postUtteranceDelay = 0.1;
-    utterance.volume = 0.6;
-    
-    
-    [_synth speakUtterance:utterance];
-}
-
--(void)flushSpeechQueue {
-    [_synth stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
-    [self loadVoice];
-}
 
 -(void)reset {
     [self setSuggestions:[_ptm clear]];
@@ -168,7 +110,7 @@
 }
 
 -(void)announce {
-    [self speak:[self prepareForSpeech:[_ptm text]]];
+    [_speech speak:[_speech prepareForSpeech:[_ptm text]]];
     [self announceCommon];
 }
 
@@ -177,9 +119,9 @@
     for ( int i = 0 ; i < [text length] ; i++ ) {
         unichar     c = [text characterAtIndex:i];
         if ( c == ' ' ) {
-            [self speak:@"רווח"];
+            [_speech speak:@"רווח"];
         } else {
-            [self speak:[NSString stringWithFormat:@"%C", c]];
+            [_speech speak:[NSString stringWithFormat:@"%C", c]];
         }
     }
     [self announceCommon];
@@ -187,12 +129,12 @@
 
 -(void)announceCommon {
     if ( [_suggestions count] ) {
-        [self speak:@"לבחירה"];
+        [_speech speak:@"לבחירה"];
         for ( NSString* text in _suggestions ) {
-            [self speak:text];
+            [_speech speak:text];
         }
     } else {
-        [self speak:@"אין מה לבחור"];
+        [_speech speak:@"אין מה לבחור"];
     }
 }
 
@@ -210,10 +152,10 @@
     [self setSuggestions:[_ptm next]];
     if ( [_suggestions count] ) {
         for ( NSString* text in _suggestions ) {
-            [self speak:text];
+            [_speech speak:text];
         }
     } else {
-        [self speak:@"אין מה לבחור"];
+        [_speech speak:@"אין מה לבחור"];
     }
 }
 
@@ -235,7 +177,7 @@
     NSString*   text = [[NSUserDefaults standardUserDefaults] stringForKey:[self bankConfKey:bankIndex]];
     
     if ( [text length] ) {
-        [self speak:[self prepareForSpeech:text]];
+        [_speech speak:[_speech prepareForSpeech:text]];
     } else {
         [self beepError];
     }
@@ -256,78 +198,8 @@
     }
 }
 
--(NSString*)prepareForSpeech:(NSString*)text {
-    
-    NSMutableString*    result = [[NSMutableString alloc] init];
-    NSUInteger          length = [text length];
-    NSCharacterSet*     letters = [NSCharacterSet letterCharacterSet];
-    NSString*           l1 = @"כמנפצ";
-    NSString*           l2 = @"ךםןףץ";
- 
-    for ( NSUInteger n = 0 ; n < length ; n++ ) {
-        unichar ch0 = (n > 0) ? [text characterAtIndex:n-1] : '\0';
-        unichar ch1 = [text characterAtIndex:n];
-        unichar ch2 = (n+1<length) ? [text characterAtIndex:n+1] : '\0';
-
-        if ( [letters characterIsMember:ch0] && [letters characterIsMember:ch1] && ![letters characterIsMember:ch2] ) {
-            for ( NSInteger m = 0 ; m < [l1 length] ; m++ ) {
-                if ( ch1 == [l1 characterAtIndex:m] ) {
-                    ch1 = [l2 characterAtIndex:m];
-                    break;
-                }
-            }
-        }
-        
-        [result appendFormat:@"%C", ch1];
-    }
-    
-    NSLog(@"%@ -> %@", text, result);
-    
-    return result;
+-(float)longKeyPressSecs {
+    return LONG_PRESS_SECS;
 }
-
-- (void)midiCommands:(NSArray<MIKMIDICommand *> *)commands {
-    
-    for ( MIKMIDICommand* cmd in commands ) {
-        MIKMIDICommandType ct = [cmd commandType];
-        if ( ct == MIKMIDICommandTypeNoteOn ) {
-            NSString*                    key = [self midiNoteToKey:(int)[(MIKMIDINoteCommand*)cmd note]];
-
-            [_tones keyPressed];
-            [_midiIgnoreNoteOff removeObject:key];
-            [self performSelector:@selector(midiTimer:) withObject:key afterDelay:LONG_PRESS_SECS];
-        }
-        else if ( ct == MIKMIDICommandTypeNoteOff ) {
-            NSString*                    key = [self midiNoteToKey:(int)[(MIKMIDINoteCommand*)cmd note]];
-            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(midiTimer:) object:key];
-            if ( ![_midiIgnoreNoteOff containsObject:key] ) {
-                [self keyPress:key];
-            }
-        } else if ( ct == MIKMIDICommandTypeControlChange ) {
-            MIKMIDIControlChangeCommand* c = (MIKMIDIControlChangeCommand*)cmd;
-            NSLog(@"ControlChange: %ld, %ld", [c controllerNumber], [c controllerValue]);
-            if ( [c controllerNumber] == 22 ) {
-                if ( [c controllerValue] == 127 ) {
-                    [_tones keyPressed];
-                    [self flushSpeechQueue];
-                    [self speak:@"מהתחלה"];
-                    [self reset];
-                }
-            }
-        }
-    }
-}
-
-- (void)midiTimer:(NSString*)key {
-    [_midiIgnoreNoteOff addObject:key];
-    [_tones keyLongPressed];
-    [self keyLongPress:key];
-}
-
-- (NSString*)midiNoteToKey:(int)note {
-    
-    return [_midiNote2Key objectForKey:[NSString stringWithFormat:@"%d", note]];
-}
-
 
 @end

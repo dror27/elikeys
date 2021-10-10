@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E20D42A32712F63200B38178 /* SpeechController.m in Sources */ = {isa = PBXBuildFile; fileRef = E20D42A22712F63200B38178 /* SpeechController.m */; };
+		E20D42AA2712F85F00B38178 /* MidiController.m in Sources */ = {isa = PBXBuildFile; fileRef = E20D42A92712F85F00B38178 /* MidiController.m */; };
 		E22C09DD2712C5510015CC26 /* TGSineWaveToneGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = E22C09DC2712C5510015CC26 /* TGSineWaveToneGenerator.m */; };
 		E22C09DF2712C7370015CC26 /* ToneGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = E22C09DE2712C7370015CC26 /* ToneGenerator.m */; };
 		E22C09E22712D8180015CC26 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E22C09E12712D8180015CC26 /* Settings.bundle */; };
@@ -65,6 +67,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E20D42A22712F63200B38178 /* SpeechController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpeechController.m; sourceTree = "<group>"; };
+		E20D42A82712F64400B38178 /* SpeechController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpeechController.h; sourceTree = "<group>"; };
+		E20D42A92712F85F00B38178 /* MidiController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MidiController.m; sourceTree = "<group>"; };
+		E20D42AB2712F87000B38178 /* MidiController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MidiController.h; sourceTree = "<group>"; };
 		E22C09D72712C5500015CC26 /* TGSineWaveToneGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TGSineWaveToneGenerator.h; sourceTree = "<group>"; };
 		E22C09DC2712C5510015CC26 /* TGSineWaveToneGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TGSineWaveToneGenerator.m; sourceTree = "<group>"; };
 		E22C09DE2712C7370015CC26 /* ToneGenerator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ToneGenerator.m; sourceTree = "<group>"; };
@@ -160,6 +166,10 @@
 				E2E5557A270C643D007FBBC2 /* SceneDelegate.m */,
 				E2E5557C270C643D007FBBC2 /* ViewController.h */,
 				E2E5557D270C643D007FBBC2 /* ViewController.m */,
+				E20D42A22712F63200B38178 /* SpeechController.m */,
+				E20D42A82712F64400B38178 /* SpeechController.h */,
+				E20D42A92712F85F00B38178 /* MidiController.m */,
+				E20D42AB2712F87000B38178 /* MidiController.h */,
 				E2E5557F270C643D007FBBC2 /* Main.storyboard */,
 				E2E55582270C6440007FBBC2 /* Assets.xcassets */,
 				E2E55584270C6440007FBBC2 /* LaunchScreen.storyboard */,
@@ -296,6 +306,8 @@
 				E2E5557B270C643D007FBBC2 /* SceneDelegate.m in Sources */,
 				E2E55596270C64D8007FBBC2 /* PredictionTypingMachine.m in Sources */,
 				E2E5559A270C6544007FBBC2 /* DBConnection.m in Sources */,
+				E20D42AA2712F85F00B38178 /* MidiController.m in Sources */,
+				E20D42A32712F63200B38178 /* SpeechController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

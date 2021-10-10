@@ -35,6 +35,12 @@
     [_words appendString:text];
 }
 
+-(void)backspace:(int)count {
+    if ( [_words length] >= count ) {
+        [_words deleteCharactersInRange:NSMakeRange([_words length]-count, count)];
+    }
+}
+
 -(NSString*)lastWord {
     return [[_words componentsSeparatedByString:@" "] lastObject];
 }

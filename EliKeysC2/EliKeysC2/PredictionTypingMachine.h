@@ -21,6 +21,9 @@
 // append text and get new suggestions
 -(NSArray<NSString*>*)append:(NSString*)text;
 
+// backspace N characters (from end)
+-(NSArray<NSString*>*)backspace:(int)count;
+
 // get next set of suggestions
 -(NSArray<NSString*>*)next;
 @end

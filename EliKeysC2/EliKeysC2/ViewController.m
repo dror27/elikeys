@@ -11,17 +11,19 @@
 #import <MIKMIDI/MIKMIDI.h>
 #import "PredictionTypingMachine.h"
 #import "DBConnection.h"
+#import "ToneGenerator.h"
 
 #define SUGGEST_COUNT       4
 #define LONG_PRESS_SECS     1.0
-#define SOFTBANK_COUNT      4
 
 @interface ViewController ()
 @property AVSpeechSynthesisVoice* voice;
 @property AVSpeechSynthesizer* synth;
 @property PredictionTypingMachine* ptm;
 @property NSArray<NSString*>* suggestions;
-@property NSMutableArray<NSString*>* softbanks;
+@property ToneGenerator* tones;
+@property NSDictionary<NSString*,NSString*>* midiNote2Key;
+@property NSMutableSet<NSString*>* midiIgnoreNoteOff;
 @end
 
 @implementation ViewController
@@ -29,17 +31,13 @@
 -(void)viewDidLoad {
     [super viewDidLoad];
     
+    [self setTones:[[ToneGenerator alloc] init]];
+    
     [self testDb];
     [self loadVoice];
     [self loadMidi];
     [self setPtm:[[PredictionTypingMachine alloc] initWith:SUGGEST_COUNT]];
     [self reset];
-    
-    [self setSoftbanks:[NSMutableArray array]];
-    for ( int n = 0 ; n < SOFTBANK_COUNT ; n++ ) {
-        [_softbanks addObject:@""];
-    }
-    
 }
 
 - (IBAction)keyTouchDown:(UIButton*)sender {
@@ -69,7 +67,7 @@
  
     [self flushSpeechQueue];
     if ( [key isEqualToString:@"C"] ) {
-        [self reset];
+        [self backspace];
     } else if ( [key isEqualToString:@"A"] ) {
         [self announce];
     } else if ( [key isEqualToString:@"S"] ) {
@@ -86,8 +84,12 @@
 -(void)keyLongPress:(NSString*)key {
     [self flushSpeechQueue];
     
-    if ( [key characterAtIndex:0] == 'B' ) {
+    if ( [key isEqualToString:@"C"] ) {
+        [self reset];
+    } else if ( [key characterAtIndex:0] == 'B' ) {
         [self setBank:[key characterAtIndex:1] - '1'];
+    } else if ( [key isEqualToString:@"A"] ) {
+        [self announceLetterByLetter];
     } else {
         [self keyPress:key];
     }
@@ -99,6 +101,14 @@
 }
 
 -(void)loadMidi {
+    
+    // initialize midi note to key mapping
+    [self setMidiNote2Key:[NSDictionary dictionaryWithObjectsAndKeys:
+                    @"1", @"52", @"2", @"49", @"3", @"53", @"4", @"51",
+                    @"N", @"46", @"A", @"41", @"S", @"45", @"C", @"50",
+                    @"B1", @"44", @"B2", @"42", @"B3", @"39", @"B4", @"37",
+                           @"B5", @"40", @"B6", @"38", @"B7", @"36", @"B8", @"35", nil]];
+    [self setMidiIgnoreNoteOff:[NSMutableSet set]];
     
     // list midi devices
     MIDINetworkSession* session = [MIDINetworkSession defaultSession];
@@ -141,7 +151,7 @@
     utterance.rate = 0.5;
     utterance.pitchMultiplier = 0.8;
     utterance.postUtteranceDelay = 0.1;
-    utterance.volume = 0.8;
+    utterance.volume = 0.6;
     
     
     [_synth speakUtterance:utterance];
@@ -159,6 +169,23 @@
 
 -(void)announce {
     [self speak:[self prepareForSpeech:[_ptm text]]];
+    [self announceCommon];
+}
+
+-(void)announceLetterByLetter {
+    NSString*   text = [_ptm text];
+    for ( int i = 0 ; i < [text length] ; i++ ) {
+        unichar     c = [text characterAtIndex:i];
+        if ( c == ' ' ) {
+            [self speak:@"רווח"];
+        } else {
+            [self speak:[NSString stringWithFormat:@"%C", c]];
+        }
+    }
+    [self announceCommon];
+}
+
+-(void)announceCommon {
     if ( [_suggestions count] ) {
         [self speak:@"לבחירה"];
         for ( NSString* text in _suggestions ) {
@@ -171,6 +198,11 @@
 
 -(void)space {
     [self setSuggestions:[_ptm append:@" "]];
+    [self announce];
+}
+
+-(void)backspace {
+    [self setSuggestions:[_ptm backspace:1]];
     [self announce];
 }
 
@@ -195,8 +227,12 @@
     }
 }
 
+- (NSString*)bankConfKey:(int)bankIndex {
+    return [NSString stringWithFormat:@"bank_%d", bankIndex + 1];
+}
+
 - (void)bank:(int)bankIndex {
-    NSString*   text = [_softbanks objectAtIndex:bankIndex];
+    NSString*   text = [[NSUserDefaults standardUserDefaults] stringForKey:[self bankConfKey:bankIndex]];
     
     if ( [text length] ) {
         [self speak:[self prepareForSpeech:text]];
@@ -207,9 +243,11 @@
 
 - (void)setBank:(int)bankIndex {
     NSString*    text = [NSString stringWithString:[_ptm text]];
-    [_softbanks setObject:text atIndexedSubscript:bankIndex];
+    [[NSUserDefaults standardUserDefaults] setObject:text forKey:[self bankConfKey:bankIndex]];
     [self beepOK];
 }
+
+
 
 - (void)testDb {
     NSMutableArray*    results = [DBConnection fetchResults:@"select word,freq from words limit 1"];
@@ -253,26 +291,43 @@
     for ( MIKMIDICommand* cmd in commands ) {
         MIKMIDICommandType ct = [cmd commandType];
         if ( ct == MIKMIDICommandTypeNoteOn ) {
-            MIKMIDINoteCommand*           c = (MIKMIDINoteCommand*)cmd;
-            NSString*                    key = [self midiNoteToKey:(int)[c note]];
-            NSLog(@"key: %@", key);
-            
-            [self keyPress:key];
+            NSString*                    key = [self midiNoteToKey:(int)[(MIKMIDINoteCommand*)cmd note]];
+
+            [_tones keyPressed];
+            [_midiIgnoreNoteOff removeObject:key];
+            [self performSelector:@selector(midiTimer:) withObject:key afterDelay:LONG_PRESS_SECS];
+        }
+        else if ( ct == MIKMIDICommandTypeNoteOff ) {
+            NSString*                    key = [self midiNoteToKey:(int)[(MIKMIDINoteCommand*)cmd note]];
+            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(midiTimer:) object:key];
+            if ( ![_midiIgnoreNoteOff containsObject:key] ) {
+                [self keyPress:key];
+            }
+        } else if ( ct == MIKMIDICommandTypeControlChange ) {
+            MIKMIDIControlChangeCommand* c = (MIKMIDIControlChangeCommand*)cmd;
+            NSLog(@"ControlChange: %ld, %ld", [c controllerNumber], [c controllerValue]);
+            if ( [c controllerNumber] == 22 ) {
+                if ( [c controllerValue] == 127 ) {
+                    [_tones keyPressed];
+                    [self flushSpeechQueue];
+                    [self speak:@"מהתחלה"];
+                    [self reset];
+                }
+            }
         }
     }
 }
 
-- (NSString*)midiNoteToKey:(int)note {
-    
-    int     i = 0;
-    for ( NSString* tok in [@"52,49,53,51,46,41,45,50,44,42,39,37,40,38,36,35" componentsSeparatedByString:@","] ) {
-        if ( [tok intValue] == note )
-            return [[@"1,2,3,4,N,A,S,C,B1,B2,B3,B4,?,?,?,?" componentsSeparatedByString:@","] objectAtIndex:i];
-        i++;
-    }
-    return nil;
+- (void)midiTimer:(NSString*)key {
+    [_midiIgnoreNoteOff addObject:key];
+    [_tones keyLongPressed];
+    [self keyLongPress:key];
 }
 
+- (NSString*)midiNoteToKey:(int)note {
+    
+    return [_midiNote2Key objectForKey:[NSString stringWithFormat:@"%d", note]];
+}
 
 
 @end

@@ -17,9 +17,6 @@
 @property NSMutableArray<NSString*>* suggestions;
 @property int                   nextSuggestionIndex;
 
-@property int   confWordSuggestionThreshold;        // in accumulator length
-@property int   confWordSuggestionCount;           // how many words to suggest
-
 -(void)updateSuggestions;
 @end
 
@@ -32,21 +29,18 @@
         [self setAccumulator:[[WordsAccumulator alloc] init]];
         [self setGenerator:[[CompletionGenerator alloc] init]];
         [self setSuggestions:[[NSMutableArray alloc] init]];
-        [self conf];
     }
     return self;
 }
 
--(void)conf {
-    NSUserDefaults*     ud = [NSUserDefaults standardUserDefaults];
-    
-    if ( !(_confWordSuggestionThreshold = (int)[ud integerForKey:@"word_suggestion_threshold"]) ) {
-        [self setConfWordSuggestionThreshold:3];
-    }
-    
-    if ( !(_confWordSuggestionCount = (int)[ud integerForKey:@"word_suggestion_count"]) ) {
-        [self setConfWordSuggestionCount:4];
-    }
+-(int)wordSuggestionThreshold {
+    NSString*         v = [[NSUserDefaults standardUserDefaults] stringForKey:@"word_suggestion_threshold"];
+    return ([v length] > 0) ? [v intValue] : 2;
+}
+
+-(int)wordSuggestionCount {
+    NSString*         v = [[NSUserDefaults standardUserDefaults] stringForKey:@"word_suggestion_count"];
+    return ([v length] > 0) ? [v intValue] : 4;
 }
 
 -(void)updateSuggestions {
@@ -59,8 +53,9 @@
     NSString*       lastWord = [_accumulator lastWord];
     
     // suggest words?
-    if ( [lastWord length] >= _confWordSuggestionThreshold ) {
-        [_suggestions addObjectsFromArray:[_generator wordCompletionSuggestions:lastWord limitTo:_confWordSuggestionCount]];
+    int     threshold = [self wordSuggestionThreshold];
+    if ( threshold && ([lastWord length] >= threshold) ) {
+        [_suggestions addObjectsFromArray:[_generator wordCompletionSuggestions:lastWord limitTo:[self wordSuggestionCount]]];
     }
     
     // suggest letters
@@ -113,4 +108,12 @@
     [self updateSuggestions];
     return [self next];
 }
+
+-(NSArray<NSString*>*)backspace:(int)count {
+    [_accumulator backspace:count];
+    
+    [self updateSuggestions];
+    return [self next];
+}
+
 @end

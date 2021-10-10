@@ -12,6 +12,7 @@
 -(void)clear;
 -(NSString*)asString;
 -(void)append:(NSString*)text;
+-(void)backspace:(int)count;
 -(NSString*)lastWord;
 -(void)completeLastWord:(NSString*)word;
 @end

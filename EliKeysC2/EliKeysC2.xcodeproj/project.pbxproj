@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E22C09DD2712C5510015CC26 /* TGSineWaveToneGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = E22C09DC2712C5510015CC26 /* TGSineWaveToneGenerator.m */; };
+		E22C09DF2712C7370015CC26 /* ToneGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = E22C09DE2712C7370015CC26 /* ToneGenerator.m */; };
+		E22C09E22712D8180015CC26 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E22C09E12712D8180015CC26 /* Settings.bundle */; };
 		E2756CE52711A65F00557267 /* MIKMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2756CE12711A63F00557267 /* MIKMIDI.framework */; };
 		E2756CE62711A65F00557267 /* MIKMIDI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E2756CE12711A63F00557267 /* MIKMIDI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E2E55578270C643D007FBBC2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E55577270C643D007FBBC2 /* AppDelegate.m */; };
@@ -62,6 +65,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E22C09D72712C5500015CC26 /* TGSineWaveToneGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TGSineWaveToneGenerator.h; sourceTree = "<group>"; };
+		E22C09DC2712C5510015CC26 /* TGSineWaveToneGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TGSineWaveToneGenerator.m; sourceTree = "<group>"; };
+		E22C09DE2712C7370015CC26 /* ToneGenerator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ToneGenerator.m; sourceTree = "<group>"; };
+		E22C09E02712C74F0015CC26 /* ToneGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ToneGenerator.h; sourceTree = "<group>"; };
+		E22C09E12712D8180015CC26 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		E2756CD6271193D800557267 /* Todo.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Todo.rtf; sourceTree = "<group>"; };
 		E2756CD72711A63F00557267 /* MIKMIDI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MIKMIDI.xcodeproj; path = ../../MIKMIDI/Framework/MIKMIDI.xcodeproj; sourceTree = "<group>"; };
 		E2E55573270C643D007FBBC2 /* EliKeysC2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EliKeysC2.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -158,6 +166,11 @@
 				E2E55587270C6440007FBBC2 /* Info.plist */,
 				E2E55588270C6440007FBBC2 /* main.m */,
 				E2756CD6271193D800557267 /* Todo.rtf */,
+				E22C09DE2712C7370015CC26 /* ToneGenerator.m */,
+				E22C09E02712C74F0015CC26 /* ToneGenerator.h */,
+				E22C09D72712C5500015CC26 /* TGSineWaveToneGenerator.h */,
+				E22C09DC2712C5510015CC26 /* TGSineWaveToneGenerator.m */,
+				E22C09E12712D8180015CC26 /* Settings.bundle */,
 			);
 			path = EliKeysC2;
 			sourceTree = "<group>";
@@ -260,6 +273,7 @@
 			files = (
 				E2E55586270C6440007FBBC2 /* LaunchScreen.storyboard in Resources */,
 				E2E55583270C6440007FBBC2 /* Assets.xcassets in Resources */,
+				E22C09E22712D8180015CC26 /* Settings.bundle in Resources */,
 				E2E55581270C643D007FBBC2 /* Main.storyboard in Resources */,
 				E2E5559F270C70A0007FBBC2 /* words.db in Resources */,
 			);
@@ -273,6 +287,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2E5557E270C643D007FBBC2 /* ViewController.m in Sources */,
+				E22C09DF2712C7370015CC26 /* ToneGenerator.m in Sources */,
+				E22C09DD2712C5510015CC26 /* TGSineWaveToneGenerator.m in Sources */,
 				E2E55578270C643D007FBBC2 /* AppDelegate.m in Sources */,
 				E2E55597270C64D8007FBBC2 /* WordsAccumulator.m in Sources */,
 				E2E55595270C64D8007FBBC2 /* CompletionGenerator.m in Sources */,

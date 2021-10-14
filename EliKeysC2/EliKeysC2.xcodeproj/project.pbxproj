@@ -120,6 +120,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E240E2E52718B9E8001939EE /* Predictor */ = {
+			isa = PBXGroup;
+			children = (
+				E2E55590270C64D7007FBBC2 /* CompletionGenerator.m */,
+				E2E55592270C64D7007FBBC2 /* PredictionTypingMachine.m */,
+				E240E2DB2718B06D001939EE /* PTMKeyController.m */,
+			);
+			name = Predictor;
+			sourceTree = "<group>";
+		};
+		E240E2E62718BA39001939EE /* Predictor */ = {
+			isa = PBXGroup;
+			children = (
+				E2E55591270C64D7007FBBC2 /* CompletionGenerator.h */,
+				E2E5558F270C64D7007FBBC2 /* PredictionTypingMachine.h */,
+				E240E2E12718B081001939EE /* PTMKeyController.h */,
+			);
+			name = Predictor;
+			sourceTree = "<group>";
+		};
 		E2756CD82711A63F00557267 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -140,16 +160,14 @@
 		E2A6019327184E09004762A4 /* Includes */ = {
 			isa = PBXGroup;
 			children = (
+				E240E2E62718BA39001939EE /* Predictor */,
 				E22C09E02712C74F0015CC26 /* ToneGenerator.h */,
 				E22C09D72712C5500015CC26 /* TGSineWaveToneGenerator.h */,
 				E2E55599270C6544007FBBC2 /* DBConnection.h */,
-				E2E55591270C64D7007FBBC2 /* CompletionGenerator.h */,
-				E2E5558F270C64D7007FBBC2 /* PredictionTypingMachine.h */,
 				E2E55593270C64D7007FBBC2 /* WordsAccumulator.h */,
 				E20D42A82712F64400B38178 /* SpeechController.h */,
 				E20D42AB2712F87000B38178 /* MidiController.h */,
 				E2A6019C27184F60004762A4 /* KeyFilter.h */,
-				E240E2E12718B081001939EE /* PTMKeyController.h */,
 				E240E2E22718B683001939EE /* KeyController.h */,
 			);
 			name = Includes;
@@ -158,16 +176,14 @@
 		E2A6019827184E32004762A4 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				E240E2E52718B9E8001939EE /* Predictor */,
 				E22C09DE2712C7370015CC26 /* ToneGenerator.m */,
 				E22C09DC2712C5510015CC26 /* TGSineWaveToneGenerator.m */,
 				E2E55598270C6544007FBBC2 /* DBConnection.m */,
-				E2E55590270C64D7007FBBC2 /* CompletionGenerator.m */,
-				E2E55592270C64D7007FBBC2 /* PredictionTypingMachine.m */,
 				E2E55594270C64D8007FBBC2 /* WordsAccumulator.m */,
 				E20D42A22712F63200B38178 /* SpeechController.m */,
 				E20D42A92712F85F00B38178 /* MidiController.m */,
 				E2A6019A27184F50004762A4 /* KeyFilter.m */,
-				E240E2DB2718B06D001939EE /* PTMKeyController.m */,
 			);
 			name = Sources;
 			sourceTree = "<group>";

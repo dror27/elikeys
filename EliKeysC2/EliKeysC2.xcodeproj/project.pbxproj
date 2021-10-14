@@ -12,6 +12,7 @@
 		E22C09DD2712C5510015CC26 /* TGSineWaveToneGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = E22C09DC2712C5510015CC26 /* TGSineWaveToneGenerator.m */; };
 		E22C09DF2712C7370015CC26 /* ToneGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = E22C09DE2712C7370015CC26 /* ToneGenerator.m */; };
 		E22C09E22712D8180015CC26 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E22C09E12712D8180015CC26 /* Settings.bundle */; };
+		E240E2DC2718B06D001939EE /* PTMKeyController.m in Sources */ = {isa = PBXBuildFile; fileRef = E240E2DB2718B06D001939EE /* PTMKeyController.m */; };
 		E2756CE52711A65F00557267 /* MIKMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2756CE12711A63F00557267 /* MIKMIDI.framework */; };
 		E2756CE62711A65F00557267 /* MIKMIDI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E2756CE12711A63F00557267 /* MIKMIDI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E2A6019B27184F50004762A4 /* KeyFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = E2A6019A27184F50004762A4 /* KeyFilter.m */; };
@@ -77,6 +78,9 @@
 		E22C09DE2712C7370015CC26 /* ToneGenerator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ToneGenerator.m; sourceTree = "<group>"; };
 		E22C09E02712C74F0015CC26 /* ToneGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ToneGenerator.h; sourceTree = "<group>"; };
 		E22C09E12712D8180015CC26 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		E240E2DB2718B06D001939EE /* PTMKeyController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTMKeyController.m; sourceTree = "<group>"; };
+		E240E2E12718B081001939EE /* PTMKeyController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTMKeyController.h; sourceTree = "<group>"; };
+		E240E2E22718B683001939EE /* KeyController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyController.h; sourceTree = "<group>"; };
 		E2756CD6271193D800557267 /* Todo.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Todo.rtf; sourceTree = "<group>"; };
 		E2756CD72711A63F00557267 /* MIKMIDI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MIKMIDI.xcodeproj; path = ../../MIKMIDI/Framework/MIKMIDI.xcodeproj; sourceTree = "<group>"; };
 		E2A6019A27184F50004762A4 /* KeyFilter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyFilter.m; sourceTree = "<group>"; };
@@ -145,6 +149,8 @@
 				E20D42A82712F64400B38178 /* SpeechController.h */,
 				E20D42AB2712F87000B38178 /* MidiController.h */,
 				E2A6019C27184F60004762A4 /* KeyFilter.h */,
+				E240E2E12718B081001939EE /* PTMKeyController.h */,
+				E240E2E22718B683001939EE /* KeyController.h */,
 			);
 			name = Includes;
 			sourceTree = "<group>";
@@ -161,6 +167,7 @@
 				E20D42A22712F63200B38178 /* SpeechController.m */,
 				E20D42A92712F85F00B38178 /* MidiController.m */,
 				E2A6019A27184F50004762A4 /* KeyFilter.m */,
+				E240E2DB2718B06D001939EE /* PTMKeyController.m */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -338,6 +345,7 @@
 				E2E5559A270C6544007FBBC2 /* DBConnection.m in Sources */,
 				E20D42AA2712F85F00B38178 /* MidiController.m in Sources */,
 				E20D42A32712F63200B38178 /* SpeechController.m in Sources */,
+				E240E2DC2718B06D001939EE /* PTMKeyController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

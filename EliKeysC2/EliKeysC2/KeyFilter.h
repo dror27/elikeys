@@ -20,6 +20,8 @@
 -(void)keyReleased;
 -(void)otherPressed;
 -(void)otherReleased;
+
+-(void)setDebug:(BOOL)debug;
 @end
 
 

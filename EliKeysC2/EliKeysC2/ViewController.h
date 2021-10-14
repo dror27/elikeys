@@ -13,10 +13,9 @@
 
 -(ToneGenerator*)tones;
 -(SpeechController*)speech;
--(void)reset;
--(void)keyPress:(NSString*)key;
--(void)keyLongPress:(NSString*)key;
--(float)longKeyPressSecs;
+-(void)key:(NSString*)key pressed:(BOOL)b;
+-(void)beepOK;
+-(void)beepError;
 
 @end
 

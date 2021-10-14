@@ -13,7 +13,6 @@
 @interface MidiController ()
 @property (weak) ViewController* vc;
 @property NSDictionary<NSString*,NSString*>* midiNote2Key;
-@property NSMutableSet<NSString*>* midiIgnoreNoteOff;
 @end
 
 @implementation MidiController
@@ -36,7 +35,6 @@
                     @"N", @"46", @"A", @"41", @"S", @"45", @"C", @"50",
                     @"B1", @"44", @"B2", @"42", @"B3", @"39", @"B4", @"37",
                            @"B5", @"40", @"B6", @"38", @"B7", @"36", @"B8", @"35", nil]];
-    [self setMidiIgnoreNoteOff:[NSMutableSet set]];
     
     // list midi devices
     MIDINetworkSession* session = [MIDINetworkSession defaultSession];
@@ -68,36 +66,25 @@
         MIKMIDICommandType ct = [cmd commandType];
         if ( ct == MIKMIDICommandTypeNoteOn ) {
             NSString*                    key = [self midiNoteToKey:(int)[(MIKMIDINoteCommand*)cmd note]];
-
             [[_vc tones] keyPressed];
-            [_midiIgnoreNoteOff removeObject:key];
-            [self performSelector:@selector(midiTimer:) withObject:key afterDelay:[_vc longKeyPressSecs]];
+            [_vc key:key pressed:TRUE];
         }
         else if ( ct == MIKMIDICommandTypeNoteOff ) {
             NSString*                    key = [self midiNoteToKey:(int)[(MIKMIDINoteCommand*)cmd note]];
-            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(midiTimer:) object:key];
-            if ( ![_midiIgnoreNoteOff containsObject:key] ) {
-                [_vc keyPress:key];
-            }
+            [_vc key:key pressed:FALSE];
         } else if ( ct == MIKMIDICommandTypeControlChange ) {
             MIKMIDIControlChangeCommand* c = (MIKMIDIControlChangeCommand*)cmd;
             NSLog(@"ControlChange: %ld, %ld", [c controllerNumber], [c controllerValue]);
             if ( [c controllerNumber] == 22 ) {
                 if ( [c controllerValue] == 127 ) {
                     [[_vc tones] keyPressed];
-                    [[_vc speech] flushSpeechQueue];
-                    [[_vc speech] speak:@"מהתחלה"];
-                    [_vc reset];
+                    [_vc key:@"X" pressed:TRUE];
+                } else {
+                    [_vc key:@"X" pressed:FALSE];
                 }
             }
         }
     }
-}
-
-- (void)midiTimer:(NSString*)key {
-    [_midiIgnoreNoteOff addObject:key];
-    [[_vc tones] keyLongPressed];
-    [_vc keyLongPress:key];
 }
 
 - (NSString*)midiNoteToKey:(int)note {

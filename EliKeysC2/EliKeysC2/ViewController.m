@@ -14,6 +14,7 @@
 #import "ToneGenerator.h"
 #import "SpeechController.h"
 #import "MidiController.h"
+#import "KeyFilter.h"
 
 #define SUGGEST_COUNT       4
 #define LONG_PRESS_SECS     1.0
@@ -24,6 +25,7 @@
 @property NSArray<NSString*>* suggestions;
 @property ToneGenerator* tones;
 @property MidiController* midi;
+@property NSMutableDictionary<NSString*,KeyFilter*>* keyFilters;
 @end
 
 @implementation ViewController
@@ -34,34 +36,61 @@
     [self setSpeech:[[SpeechController alloc] init]];
     [self setTones:[[ToneGenerator alloc] init]];
     [self setMidi:[[MidiController alloc] initWith:self]];
+    [self setKeyFilters:[NSMutableDictionary dictionary]];
     
     [self testDb];
     [self setPtm:[[PredictionTypingMachine alloc] initWith:SUGGEST_COUNT]];
     [self reset];
 }
 
+-(NSArray<NSRegularExpression*>*)expressionsForKey:(NSString*)key {
+    
+    // hardcoded for now
+    return [NSArray arrayWithObjects:
+            [NSRegularExpression regularExpressionWithPattern:KEYFILTER_P_NORMAL options:0 error:nil],
+            [NSRegularExpression regularExpressionWithPattern:KEYFILTER_P_LONG options:0 error:nil],
+            nil];
+}
+
+-(KeyFilter*)filterForKey:(NSString*)key {
+    KeyFilter*      filter = [_keyFilters objectForKey:key];
+    if ( !filter ) {
+        filter = [[KeyFilter alloc] initName:key andExpressions:[self expressionsForKey:key]
+                                  usingBlock:^(KeyFilter *keyFilter, NSUInteger exprIndex) {
+            if ( exprIndex == 0 )
+                [self keyPress:[keyFilter name]];
+            else if ( exprIndex == 1 )
+                [self keyLongPress:[keyFilter name]];
+        }];
+        [_keyFilters setObject:filter forKey:key];
+    }
+    return filter;
+}
+
 - (IBAction)keyTouchDown:(UIButton*)sender {
     NSLog(@"keyTouchDown: %@", sender.titleLabel.text);
     
-    [self performSelector:@selector(keyTimer:) withObject:sender afterDelay:LONG_PRESS_SECS];
-    sender.tag = 0;
-}
-
-- (IBAction)keyTouchUpInside:(UIButton*)sender {
-    if ( sender.tag == 0 ) {
-        NSLog(@"keyTouchUpInside: %@", sender.titleLabel.text);
-        
-        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(keyTimer:) object:sender];
-        
-        [self keyPress:sender.titleLabel.text];
+    KeyFilter*      filter = [self filterForKey:sender.titleLabel.text];
+    for ( KeyFilter* f in [_keyFilters allValues] ) {
+        if ( f == filter )
+            [f keyPressed];
+        else
+            [f otherPressed];
     }
 }
 
-- (void)keyTimer:(UIButton*)sender {
-    NSLog(@"keyTimer: %@", sender.titleLabel.text);
-    sender.tag = 1;
-    [self keyLongPress:sender.titleLabel.text];
+- (IBAction)keyTouchUpInside:(UIButton*)sender {
+    NSLog(@"keyTouchUpInside: %@", sender.titleLabel.text);
+
+    KeyFilter*      filter = [self filterForKey:sender.titleLabel.text];
+    for ( KeyFilter* f in [_keyFilters allValues] ) {
+        if ( f == filter )
+            [f keyReleased];
+        else
+            [f otherReleased];
+    }
 }
+
 
 -(void)keyPress:(NSString*)key {
  

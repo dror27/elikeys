@@ -25,6 +25,7 @@
                                     <fontDescription key="titleFontDescription" type="system" pointSize="64"/>
                                 </buttonConfiguration>
                                 <connections>
+                                    <action selector="keyTouchDown:" destination="BYZ-38-t0r" eventType="touchDown" id="ySE-vZ-3K8"/>
                                     <action selector="keyTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="URJ-bT-9uQ"/>
                                 </connections>
                             </button>
@@ -36,6 +37,7 @@
                                     <fontDescription key="titleFontDescription" type="system" pointSize="64"/>
                                 </buttonConfiguration>
                                 <connections>
+                                    <action selector="keyTouchDown:" destination="BYZ-38-t0r" eventType="touchDown" id="rWf-M8-Lo0"/>
                                     <action selector="keyTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Ee1-kr-aL8"/>
                                 </connections>
                             </button>
@@ -47,6 +49,7 @@
                                     <fontDescription key="titleFontDescription" type="system" pointSize="55"/>
                                 </buttonConfiguration>
                                 <connections>
+                                    <action selector="keyTouchDown:" destination="BYZ-38-t0r" eventType="touchDown" id="Nho-nV-BTP"/>
                                     <action selector="keyTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="HCG-gf-rTy"/>
                                 </connections>
                             </button>
@@ -58,6 +61,7 @@
                                     <fontDescription key="titleFontDescription" type="system" pointSize="64"/>
                                 </buttonConfiguration>
                                 <connections>
+                                    <action selector="keyTouchDown:" destination="BYZ-38-t0r" eventType="touchDown" id="xR8-6B-uog"/>
                                     <action selector="keyTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="r07-ee-Cjd"/>
                                 </connections>
                             </button>
@@ -69,6 +73,7 @@
                                     <fontDescription key="titleFontDescription" type="system" pointSize="64"/>
                                 </buttonConfiguration>
                                 <connections>
+                                    <action selector="keyTouchDown:" destination="BYZ-38-t0r" eventType="touchDown" id="4yK-tk-fM7"/>
                                     <action selector="keyTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="l8b-a7-uDT"/>
                                 </connections>
                             </button>
@@ -80,6 +85,7 @@
                                     <fontDescription key="titleFontDescription" type="system" pointSize="64"/>
                                 </buttonConfiguration>
                                 <connections>
+                                    <action selector="keyTouchDown:" destination="BYZ-38-t0r" eventType="touchDown" id="ldW-Hk-RSJ"/>
                                     <action selector="keyTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="MLw-4A-WoA"/>
                                 </connections>
                             </button>
@@ -91,6 +97,7 @@
                                     <fontDescription key="titleFontDescription" type="system" pointSize="64"/>
                                 </buttonConfiguration>
                                 <connections>
+                                    <action selector="keyTouchDown:" destination="BYZ-38-t0r" eventType="touchDown" id="he5-1g-TkP"/>
                                     <action selector="keyTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="KJe-Oc-7MH"/>
                                 </connections>
                             </button>
@@ -102,6 +109,7 @@
                                     <fontDescription key="titleFontDescription" type="system" pointSize="64"/>
                                 </buttonConfiguration>
                                 <connections>
+                                    <action selector="keyTouchDown:" destination="BYZ-38-t0r" eventType="touchDown" id="uBK-l5-0X1"/>
                                     <action selector="keyTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Lbg-FH-Lc1"/>
                                 </connections>
                             </button>

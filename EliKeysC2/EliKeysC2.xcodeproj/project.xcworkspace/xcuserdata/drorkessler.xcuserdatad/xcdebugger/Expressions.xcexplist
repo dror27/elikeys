@@ -3,15 +3,23 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "-[ToneGenerator beep:withDuration:]:ToneGenerator.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[KeyFilter appendAndEval:]:KeyFilter.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[expr matchesInString:_timeline options:0 range:NSMakeRange(0, [_timeline length])]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "-[PredictionTypingMachine conf]:PredictionTypingMachine.m">
          <PersistentStrings>
             <PersistentString
                value = "[ud asDictionary]">
             </PersistentString>
          </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "-[ToneGenerator beep:withDuration:]:ToneGenerator.m">
       </ContextState>
    </ContextStates>
 </VariablesViewState>

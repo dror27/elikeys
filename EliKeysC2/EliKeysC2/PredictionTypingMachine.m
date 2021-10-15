@@ -22,11 +22,11 @@
 
 @implementation PredictionTypingMachine
 
--(PredictionTypingMachine*)initWith:(int)blockSize; {
+-(PredictionTypingMachine*)initWithWAcc:(WordsAccumulator*)wacc andBlockSize:(int)blockSize {
     self = [super init];
     if (self) {
         _blockSize = blockSize;
-        [self setAccumulator:[[WordsAccumulator alloc] init]];
+        [self setAccumulator:wacc];
         [self setGenerator:[[CompletionGenerator alloc] init]];
         [self setSuggestions:[[NSMutableArray alloc] init]];
     }

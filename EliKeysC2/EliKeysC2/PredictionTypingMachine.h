@@ -8,9 +8,11 @@
 #ifndef PredictionTypingMachine_h
 #define PredictionTypingMachine_h
 
+#import "WordsAccumulator.h"
+
 @interface PredictionTypingMachine : NSObject
 // initialize
--(PredictionTypingMachine*)initWith:(int)blockSize;
+-(PredictionTypingMachine*)initWithWAcc:(WordsAccumulator*)wacc andBlockSize:(int)blockSize;
 
 // get text representation of the accumulator
 -(NSString*)text;

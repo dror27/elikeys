@@ -29,7 +29,7 @@
     if (self) {
         [self setVc:vc];
         [self setSpeech:[_vc speech]];
-        [self setPtm:[[PredictionTypingMachine alloc] initWith:SUGGEST_COUNT]];
+        [self setPtm:[[PredictionTypingMachine alloc] initWithWAcc:[_vc wacc] andBlockSize:SUGGEST_COUNT]];
     }
     return self;
 }

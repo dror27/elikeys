@@ -8,9 +8,11 @@
 #import <UIKit/UIKit.h>
 #import "ToneGenerator.h"
 #import "SpeechController.h"
+#import "WordsAccumulator.h"
 
 @interface ViewController : UIViewController
 
+-(WordsAccumulator*)wacc;
 -(ToneGenerator*)tones;
 -(SpeechController*)speech;
 -(void)key:(NSString*)key pressed:(BOOL)b;

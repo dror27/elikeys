@@ -14,9 +14,11 @@
 #import "ToneGenerator.h"
 #import "SpeechController.h"
 #import "MidiController.h"
+#import "WordsAccumulator.h"
 #import "KeyFilter.h"
 
 @interface ViewController ()
+@property WordsAccumulator* wacc;
 @property SpeechController* speech;
 @property id<KeyController> keyController;
 @property ToneGenerator* tones;
@@ -29,6 +31,7 @@
 -(void)viewDidLoad {
     [super viewDidLoad];
 
+    [self setWacc:[[WordsAccumulator alloc] init]];
     [self setSpeech:[[SpeechController alloc] init]];
     [self setTones:[[ToneGenerator alloc] init]];
     [self setMidi:[[MidiController alloc] initWith:self]];

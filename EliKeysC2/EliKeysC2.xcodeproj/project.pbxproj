@@ -16,6 +16,7 @@
 		E2756CE52711A65F00557267 /* MIKMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2756CE12711A63F00557267 /* MIKMIDI.framework */; };
 		E2756CE62711A65F00557267 /* MIKMIDI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E2756CE12711A63F00557267 /* MIKMIDI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E2A6019B27184F50004762A4 /* KeyFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = E2A6019A27184F50004762A4 /* KeyFilter.m */; };
+		E2DF5F3A271AD12A00EDC987 /* BankedKeyController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2DF5F39271AD12A00EDC987 /* BankedKeyController.m */; };
 		E2E55578270C643D007FBBC2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E55577270C643D007FBBC2 /* AppDelegate.m */; };
 		E2E5557B270C643D007FBBC2 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E5557A270C643D007FBBC2 /* SceneDelegate.m */; };
 		E2E5557E270C643D007FBBC2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E5557D270C643D007FBBC2 /* ViewController.m */; };
@@ -85,6 +86,8 @@
 		E2756CD72711A63F00557267 /* MIKMIDI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MIKMIDI.xcodeproj; path = ../../MIKMIDI/Framework/MIKMIDI.xcodeproj; sourceTree = "<group>"; };
 		E2A6019A27184F50004762A4 /* KeyFilter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyFilter.m; sourceTree = "<group>"; };
 		E2A6019C27184F60004762A4 /* KeyFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyFilter.h; sourceTree = "<group>"; };
+		E2DF5F39271AD12A00EDC987 /* BankedKeyController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BankedKeyController.m; sourceTree = "<group>"; };
+		E2DF5F3B271AD14F00EDC987 /* BankedKeyController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BankedKeyController.h; sourceTree = "<group>"; };
 		E2E55573270C643D007FBBC2 /* EliKeysC2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EliKeysC2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2E55576270C643D007FBBC2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E2E55577270C643D007FBBC2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -160,6 +163,7 @@
 		E2A6019327184E09004762A4 /* Includes */ = {
 			isa = PBXGroup;
 			children = (
+				E2DF5F38271AD11100EDC987 /* Banked */,
 				E240E2E62718BA39001939EE /* Predictor */,
 				E22C09E02712C74F0015CC26 /* ToneGenerator.h */,
 				E22C09D72712C5500015CC26 /* TGSineWaveToneGenerator.h */,
@@ -176,6 +180,7 @@
 		E2A6019827184E32004762A4 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				E2DF5F33271AD0EB00EDC987 /* Banked */,
 				E240E2E52718B9E8001939EE /* Predictor */,
 				E22C09DE2712C7370015CC26 /* ToneGenerator.m */,
 				E22C09DC2712C5510015CC26 /* TGSineWaveToneGenerator.m */,
@@ -201,6 +206,22 @@
 				E2E55588270C6440007FBBC2 /* main.m */,
 			);
 			name = StdGlue;
+			sourceTree = "<group>";
+		};
+		E2DF5F33271AD0EB00EDC987 /* Banked */ = {
+			isa = PBXGroup;
+			children = (
+				E2DF5F39271AD12A00EDC987 /* BankedKeyController.m */,
+			);
+			name = Banked;
+			sourceTree = "<group>";
+		};
+		E2DF5F38271AD11100EDC987 /* Banked */ = {
+			isa = PBXGroup;
+			children = (
+				E2DF5F3B271AD14F00EDC987 /* BankedKeyController.h */,
+			);
+			name = Banked;
 			sourceTree = "<group>";
 		};
 		E2E5556A270C643D007FBBC2 = {
@@ -360,6 +381,7 @@
 				E2E55596270C64D8007FBBC2 /* PredictionTypingMachine.m in Sources */,
 				E2E5559A270C6544007FBBC2 /* DBConnection.m in Sources */,
 				E20D42AA2712F85F00B38178 /* MidiController.m in Sources */,
+				E2DF5F3A271AD12A00EDC987 /* BankedKeyController.m in Sources */,
 				E20D42A32712F63200B38178 /* SpeechController.m in Sources */,
 				E240E2DC2718B06D001939EE /* PTMKeyController.m in Sources */,
 			);

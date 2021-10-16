@@ -8,10 +8,12 @@
 #ifndef KeyController_h
 #define KeyController_h
 
+#import "KeyFilter.h"
+
 @protocol KeyController<NSObject>
+-(NSArray<KeyFilterExpr*>*)filtersForKey:(NSUInteger)keyTag;
 -(void)reset;
--(void)keyPress:(NSUInteger)tag;
--(void)keyLongPress:(NSUInteger)tag;
+-(void)keyPress:(NSUInteger)keyTag keyFilterIndex:(NSUInteger)filterIndex;
 @end
 
 #endif /* KeyController_h */

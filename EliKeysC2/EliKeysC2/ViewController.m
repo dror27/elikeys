@@ -10,6 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <MIKMIDI/MIKMIDI.h>
 #import "PTMKeyController.h"
+#import "BankedKeyController.h"
 #import "DBConnection.h"
 #import "ToneGenerator.h"
 #import "SpeechController.h"
@@ -20,10 +21,13 @@
 @interface ViewController ()
 @property WordsAccumulator* wacc;
 @property SpeechController* speech;
+@property NSArray<id<KeyController>>* allKeyControllers;
 @property id<KeyController> keyController;
 @property ToneGenerator* tones;
 @property MidiController* midi;
 @property NSMutableDictionary<NSString*,KeyFilter*>* keyFilters;
+@property (weak, nonatomic) IBOutlet UIMenu *modeMenu;
+@property (weak, nonatomic) IBOutlet UICommand *modePredictor;
 @end
 
 @implementation ViewController
@@ -38,30 +42,22 @@
     [self setKeyFilters:[NSMutableDictionary dictionary]];
     
     [self testDb];
-    [self setKeyController:[[PTMKeyController alloc] initWith:self]];
-    [_keyController reset];
-}
 
--(NSArray<NSRegularExpression*>*)expressionsForKey:(NSString*)key {
+    [self setAllKeyControllers:[NSArray arrayWithObjects:
+                                [[BankedKeyController alloc] initWith:self],
+                                [[PTMKeyController alloc] initWith:self],
+                                nil]];
+    [self setKeyController:[_allKeyControllers objectAtIndex:0]];
+    [_keyController reset];
     
-    // hardcoded for now
-    return [NSArray arrayWithObjects:
-            [NSRegularExpression regularExpressionWithPattern:KEYFILTER_P_NORMAL options:0 error:nil],
-            [NSRegularExpression regularExpressionWithPattern:KEYFILTER_P_LONG options:0 error:nil],
-            nil];
 }
 
 -(KeyFilter*)filterForKey:(NSString*)key {
     KeyFilter*      filter = [_keyFilters objectForKey:key];
     if ( !filter ) {
-        filter = [[KeyFilter alloc] initName:key andExpressions:[self expressionsForKey:key]
+        filter = [[KeyFilter alloc] initName:key andExpressions:[_keyController filtersForKey:[key intValue]]
                                   usingBlock:^(KeyFilter *keyFilter, NSUInteger exprIndex) {
-            if ( exprIndex == 0 )
-                [_keyController keyPress:[[keyFilter name] intValue]];
-            else if ( exprIndex == 1 ) {
-                [_tones keyLongPressed];
-                [_keyController keyLongPress:[[keyFilter name] intValue]];
-            }
+            [_keyController keyPress:[[keyFilter name] intValue] keyFilterIndex:exprIndex];
         }];
         [filter setDebug:FALSE];
         [_keyFilters setObject:filter forKey:key];
@@ -104,6 +100,18 @@
     for ( NSDictionary* obj in results ) {
         NSLog(@"obj: %@", obj);
     }
+}
+
+-(void)switchKeyController:(NSUInteger)index {
+
+    [_speech flushSpeechQueue];
+    [_keyFilters removeAllObjects];
+    [self setKeyController:[_allKeyControllers objectAtIndex:index]];
+    [_keyController reset];
+}
+
+- (IBAction)modeValueChanged:(UISegmentedControl *)sender {
+    [self switchKeyController:sender.selectedSegmentIndex];
 }
 
 @end

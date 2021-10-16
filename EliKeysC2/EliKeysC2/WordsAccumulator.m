@@ -53,4 +53,8 @@
     [self append:@" "];
 }
 
+-(NSUInteger)length {
+    return [_words length];
+}
+
 @end

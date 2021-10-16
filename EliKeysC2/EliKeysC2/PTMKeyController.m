@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "ViewController.h"
+#import "KeyFilter.h"
 #import "PTMKeyController.h"
 #import "PredictionTypingMachine.h"
 #import "SpeechController.h"
@@ -34,9 +35,29 @@
     return self;
 }
 
--(void)keyPress:(NSUInteger)tag {
+-(NSArray<KeyFilterExpr*>*)filtersForKey:(NSUInteger)keyTag {
     
-    NSString*       key = [self keyNameForTag:tag];
+    // hardcoded for now
+    return [NSArray arrayWithObjects:
+            [[KeyFilterExpr alloc] initWithPattern:KEYFILTER_P_NORMAL],
+            [[KeyFilterExpr alloc] initWithPattern:KEYFILTER_P_LONG],
+            nil];
+}
+
+-(void)keyPress:(NSUInteger)keyTag keyFilterIndex:(NSUInteger)filterIndex {
+    
+    if ( filterIndex == 0 )
+        [self keyPress:keyTag];
+    else if ( filterIndex == 1 ) {
+        [[_vc tones] keyLongPressed];
+        [self keyLongPress:keyTag];
+    }
+}
+
+
+-(void)keyPress:(NSUInteger)keyTag {
+    
+    NSString*       key = [self keyNameForTag:keyTag];
  
     [_speech flushSpeechQueue];
     if ( [key isEqualToString:@"C"] ) {
@@ -58,9 +79,9 @@
     }
 }
 
--(void)keyLongPress:(NSUInteger)tag {
+-(void)keyLongPress:(NSUInteger)keyTag {
 
-    NSString*       key = [self keyNameForTag:tag];
+    NSString*       key = [self keyNameForTag:keyTag];
 
     [_speech flushSpeechQueue];
     
@@ -71,7 +92,7 @@
     } else if ( [key isEqualToString:@"A"] ) {
         [self announceLetterByLetter];
     } else {
-        [self keyPress:tag];
+        [self keyPress:keyTag];
     }
 }
 

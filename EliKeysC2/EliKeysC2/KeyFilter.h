@@ -11,10 +11,17 @@
 // patterns
 #define     KEYFILTER_P_NORMAL            @"P((T)*(I)?)?R$"
 #define     KEYFILTER_P_LONG              @"PTTTTT$"
-#define     KEYFILTER_P_IMMEDIATE         @"P"
+#define     KEYFILTER_P_IMMEDIATE         @"P$"
+
+@interface KeyFilterExpr : NSObject
+-(KeyFilterExpr*)initWithPattern:(NSString*)pattern;
+-(BOOL)matches:(NSString*)text;
+-(BOOL)emits;
+-(void)setEmits:(BOOL)v;
+@end
 
 @interface KeyFilter : NSObject
--(KeyFilter*)initName:(NSString*)name andExpressions:(NSArray<NSRegularExpression*>*)exprs usingBlock:(void (NS_NOESCAPE ^)(KeyFilter * keyFilter, NSUInteger exprIndex))block;
+-(KeyFilter*)initName:(NSString*)name andExpressions:(NSArray<KeyFilterExpr*>*)exprs usingBlock:(void (NS_NOESCAPE ^)(KeyFilter * keyFilter, NSUInteger exprIndex))block;
 -(NSString*)name;
 -(void)keyPressed;
 -(void)keyReleased;
@@ -23,6 +30,7 @@
 
 -(void)setDebug:(BOOL)debug;
 @end
+
 
 
 #endif /* KeyFilter_h */

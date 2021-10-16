@@ -187,6 +187,25 @@
                                     <action selector="keyTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="L7G-0i-sRw"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Mode:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nra-es-BbX">
+                                <rect key="frame" x="28" y="128" width="48" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="66i-qZ-Iz2">
+                                <rect key="frame" x="90" y="123" width="153" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="Banked"/>
+                                    <segment title="Predictor"/>
+                                </segments>
+                                <connections>
+                                    <action selector="modeChanged:" destination="BYZ-38-t0r" eventType="touchUpInside" id="aNf-4S-fTs"/>
+                                    <action selector="modeValueChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="BoZ-PO-HJa"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>

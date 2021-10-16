@@ -27,7 +27,7 @@
 
 @interface KeyFilter ()
 @property NSString*       name;
-@property NSArray<NSRegularExpression*>* exprs;
+@property NSArray<KeyFilterExpr*>* exprs;
 @property (copy) void (^block)(KeyFilter *keyFilter, NSUInteger exprIndex);
 
 
@@ -47,7 +47,7 @@
 @implementation KeyFilter
 
 // initilize instance
--(KeyFilter*)initName:(NSString*)name andExpressions:(NSArray<NSRegularExpression*>*)exprs usingBlock:(void (NS_NOESCAPE ^)(KeyFilter * keyFilter, NSUInteger exprIndex))block
+-(KeyFilter*)initName:(NSString*)name andExpressions:(NSArray<KeyFilterExpr*>*)exprs usingBlock:(void (NS_NOESCAPE ^)(KeyFilter * keyFilter, NSUInteger exprIndex))block
 {
     self = [super init];
     if (self) {
@@ -76,8 +76,8 @@
     
     // evaluate expressions
     NSUInteger      exprIndex = 0;
-    for ( NSRegularExpression* expr in _exprs ) {
-        if ( [expr numberOfMatchesInString:_timeline options:0 range:NSMakeRange(0, [_timeline length])] > 0 ) {
+    for ( KeyFilterExpr* expr in _exprs ) {
+        if ( [expr matches:_timeline] ) {
             [self fire:exprIndex];
             break;
         }
@@ -88,7 +88,8 @@
 -(void)fire:(NSUInteger)exprIndex {
     
     // enter into timeline
-    [_timeline appendString:[NSString stringWithFormat:@"%ld", exprIndex]];
+    if ( [[_exprs objectAtIndex:exprIndex] emits] )
+        [_timeline appendString:[NSString stringWithFormat:@"%ld", exprIndex]];
     
     // invoke block
     _block(self, exprIndex);
@@ -136,5 +137,27 @@
     if ( !_ignoreOther )
         [self appendAndEval:E_OTHER_RELEASED];
 }
+@end
+
+@interface KeyFilterExpr ()
+@property NSRegularExpression*  regex;
+@property BOOL                emits;
+@end
+
+@implementation KeyFilterExpr
+
+-(KeyFilterExpr*)initWithPattern:(NSString*)pattern {
+    self = [super init];
+    if (self) {
+        [self setRegex:[NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil]];
+         _emits = TRUE;
+    }
+    return self;
+}
+
+-(BOOL)matches:(NSString*)text {
+    return [_regex numberOfMatchesInString:text options:0 range:NSMakeRange(0, [text length])] > 0;
+}
+
 @end
 

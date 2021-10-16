@@ -15,6 +15,7 @@
 -(void)backspace:(int)count;
 -(NSString*)lastWord;
 -(void)completeLastWord:(NSString*)word;
+-(NSUInteger)length;
 @end
 
 #endif /* WordsAccumulator_h */

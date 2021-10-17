@@ -18,11 +18,11 @@
 
 // timer settings
 #define     TIMER_TICK_DURATION 0.1
-#define     TIMER_TICKS_TO_IDLE 10
+#define     TIMER_TICKS_TO_IDLE 30
 
 // defaults
 #define     DEF_IGNORE_OTHER    FALSE
-#define     DEF_TIMELINE_LIMIT  40
+#define     DEF_TIMELINE_LIMIT  100
 #define     DEF_DEBUG           TRUE
 
 @interface KeyFilter ()
@@ -147,9 +147,30 @@
 @implementation KeyFilterExpr
 
 -(KeyFilterExpr*)initWithPattern:(NSString*)pattern {
+    return [self initWithRegex:[NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil]];
+}
+
+-(KeyFilterExpr*)initFromUserData:(NSString*)key withDefaultPattern:(NSString*)pattern {
+    NSError*                error = nil;
+    NSString*               userPattern = [[NSUserDefaults standardUserDefaults] stringForKey:key];
+    NSRegularExpression*    regex = nil;
+    if ( userPattern != nil ) {
+        regex = [NSRegularExpression regularExpressionWithPattern:userPattern options:0 error:&error];
+    }
+    if ( !regex || error ) {
+        if ( userPattern )
+            NSLog(@"Error: %@, on userPattern: %@", error, userPattern);
+        return [self initWithPattern:pattern];
+    } else {
+        return [self initWithRegex:regex];
+    }
+    
+}
+
+-(KeyFilterExpr*)initWithRegex:(NSRegularExpression*)regex {
     self = [super init];
     if (self) {
-        [self setRegex:[NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil]];
+        [self setRegex:regex];
          _emits = TRUE;
     }
     return self;

@@ -12,9 +12,12 @@
 #define     KEYFILTER_P_NORMAL            @"P((T)*(I)?)?R$"
 #define     KEYFILTER_P_LONG              @"PTTTTT$"
 #define     KEYFILTER_P_IMMEDIATE         @"P$"
+#define     KEYFILTER_P_EXCUSIVE          @"[^rp0-9]{20}$"
 
 @interface KeyFilterExpr : NSObject
 -(KeyFilterExpr*)initWithPattern:(NSString*)pattern;
+-(KeyFilterExpr*)initFromUserData:(NSString*)key withDefaultPattern:(NSString*)pattern;
+-(KeyFilterExpr*)initWithRegex:(NSRegularExpression*)regex;
 -(BOOL)matches:(NSString*)text;
 -(BOOL)emits;
 -(void)setEmits:(BOOL)v;
@@ -29,6 +32,7 @@
 -(void)otherReleased;
 
 -(void)setDebug:(BOOL)debug;
+
 @end
 
 

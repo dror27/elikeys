@@ -15,6 +15,7 @@
 		E240E2DC2718B06D001939EE /* PTMKeyController.m in Sources */ = {isa = PBXBuildFile; fileRef = E240E2DB2718B06D001939EE /* PTMKeyController.m */; };
 		E2756CE52711A65F00557267 /* MIKMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2756CE12711A63F00557267 /* MIKMIDI.framework */; };
 		E2756CE62711A65F00557267 /* MIKMIDI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E2756CE12711A63F00557267 /* MIKMIDI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E27B9C3A271EFA3A003F8B55 /* words.db in Resources */ = {isa = PBXBuildFile; fileRef = E27B9C39271EFA3A003F8B55 /* words.db */; };
 		E2A6019B27184F50004762A4 /* KeyFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = E2A6019A27184F50004762A4 /* KeyFilter.m */; };
 		E2DF5F3A271AD12A00EDC987 /* BankedKeyController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2DF5F39271AD12A00EDC987 /* BankedKeyController.m */; };
 		E2E55578270C643D007FBBC2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E55577270C643D007FBBC2 /* AppDelegate.m */; };
@@ -28,7 +29,6 @@
 		E2E55596270C64D8007FBBC2 /* PredictionTypingMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E55592270C64D7007FBBC2 /* PredictionTypingMachine.m */; };
 		E2E55597270C64D8007FBBC2 /* WordsAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E55594270C64D8007FBBC2 /* WordsAccumulator.m */; };
 		E2E5559A270C6544007FBBC2 /* DBConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E55598270C6544007FBBC2 /* DBConnection.m */; };
-		E2E5559F270C70A0007FBBC2 /* words.db in Resources */ = {isa = PBXBuildFile; fileRef = E2E5559C270C658B007FBBC2 /* words.db */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +84,7 @@
 		E240E2E22718B683001939EE /* KeyController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyController.h; sourceTree = "<group>"; };
 		E2756CD6271193D800557267 /* Todo.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Todo.rtf; sourceTree = "<group>"; };
 		E2756CD72711A63F00557267 /* MIKMIDI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MIKMIDI.xcodeproj; path = ../../MIKMIDI/Framework/MIKMIDI.xcodeproj; sourceTree = "<group>"; };
+		E27B9C39271EFA3A003F8B55 /* words.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = words.db; sourceTree = "<group>"; };
 		E2A6019A27184F50004762A4 /* KeyFilter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyFilter.m; sourceTree = "<group>"; };
 		E2A6019C27184F60004762A4 /* KeyFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyFilter.h; sourceTree = "<group>"; };
 		E2DF5F39271AD12A00EDC987 /* BankedKeyController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BankedKeyController.m; sourceTree = "<group>"; };
@@ -108,7 +109,6 @@
 		E2E55594270C64D8007FBBC2 /* WordsAccumulator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WordsAccumulator.m; sourceTree = "<group>"; };
 		E2E55598270C6544007FBBC2 /* DBConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBConnection.m; sourceTree = "<group>"; };
 		E2E55599270C6544007FBBC2 /* DBConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBConnection.h; sourceTree = "<group>"; };
-		E2E5559C270C658B007FBBC2 /* words.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = words.db; path = ../../../EliKeysC1/Resources/words.db; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -261,7 +261,7 @@
 		E2E5559B270C6578007FBBC2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				E2E5559C270C658B007FBBC2 /* words.db */,
+				E27B9C39271EFA3A003F8B55 /* words.db */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -356,9 +356,9 @@
 			files = (
 				E2E55586270C6440007FBBC2 /* LaunchScreen.storyboard in Resources */,
 				E2E55583270C6440007FBBC2 /* Assets.xcassets in Resources */,
+				E27B9C3A271EFA3A003F8B55 /* words.db in Resources */,
 				E22C09E22712D8180015CC26 /* Settings.bundle in Resources */,
 				E2E55581270C643D007FBBC2 /* Main.storyboard in Resources */,
-				E2E5559F270C70A0007FBBC2 /* words.db in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

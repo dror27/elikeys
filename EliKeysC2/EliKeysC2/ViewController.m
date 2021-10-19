@@ -41,7 +41,7 @@
     [self setMidi:[[MidiController alloc] initWith:self]];
     [self setKeyFilters:[NSMutableDictionary dictionary]];
     
-    [self testDb];
+    //[self testDb];
 
     [self setAllKeyControllers:[NSArray arrayWithObjects:
                                 [[BankedKeyController alloc] initWith:self],
@@ -49,6 +49,8 @@
                                 nil]];
     [self setKeyController:[_allKeyControllers objectAtIndex:0]];
     [_keyController reset];
+    
+    NSLog(@"viewDidLoad: Done");
     
 }
 

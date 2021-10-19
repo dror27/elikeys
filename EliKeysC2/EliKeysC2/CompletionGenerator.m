@@ -20,7 +20,7 @@
     self = [super init];
     if (self) {
         [self setAllLetters:[self nextLetterSuggestions:@""]];
-        NSLog(@"allLetters: %@", _allLetters);
+        //NSLog(@"allLetters: %@", _allLetters);
     }
     return self;
 }
@@ -32,7 +32,7 @@
                                 where word like '%@%%' \
                                 group by w order by f desc",
                             [prefix length] + 1, prefix];
-    NSLog(@"query: %@", query);
+    //NSLog(@"query: %@", query);
     NSMutableArray*    results = [DBConnection fetchResults:query];
     NSMutableArray*    suggestions = [[NSMutableArray alloc] init];
     NSCharacterSet*    letters = [NSCharacterSet letterCharacterSet];

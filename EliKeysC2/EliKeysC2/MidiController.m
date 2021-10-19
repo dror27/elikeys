@@ -32,9 +32,9 @@
     // initialize midi note to key mapping
     [self setMidiNote2Key:[NSDictionary dictionaryWithObjectsAndKeys:
                     @"1", @"52", @"2", @"49", @"3", @"53", @"4", @"51",
-                    @"N", @"46", @"A", @"41", @"S", @"45", @"C", @"50",
-                    @"B1", @"44", @"B2", @"42", @"B3", @"39", @"B4", @"37",
-                           @"B5", @"40", @"B6", @"38", @"B7", @"36", @"B8", @"35", nil]];
+                    @"5", @"46", @"6", @"41", @"7", @"45", @"8", @"50",
+                    @"9", @"44", @"10", @"42", @"11", @"39", @"12", @"37",
+                    @"13", @"40", @"14", @"38", @"15", @"36", @"16", @"35", nil]];
     
     // list midi devices
     MIDINetworkSession* session = [MIDINetworkSession defaultSession];
@@ -44,17 +44,19 @@
     MIKMIDIDeviceManager* dm = [MIKMIDIDeviceManager sharedDeviceManager];
     NSArray<MIKMIDIDevice*>*    devs = [dm availableDevices];
     NSError                    *error;
-    NSLog(@"devs: %@", devs);
+    //NSLog(@"devs: %@", devs);
     for ( MIKMIDIDevice* dev in devs ) {
         for ( MIKMIDIEntity* ent in [dev entities] ) {
-            NSLog(@"ent: %@", ent);
+            //NSLog(@"ent: %@", ent);
             for ( MIKMIDIEndpoint* ep in [ent sources] ) {
                 id tok1 = [dm connectInput:ep error:&error eventHandler:^(MIKMIDISourceEndpoint * _Nonnull source, NSArray<MIKMIDICommand *> * _Nonnull commands) {
                     //NSLog(@"source: %@, commands: %@", source,  commands);
                     [self performSelectorOnMainThread:@selector(midiCommands:) withObject:commands waitUntilDone:FALSE];
                 }];
-                NSLog(@"error: %@", error);
-                NSLog(@"tok: %@", tok1);
+                if ( error ) {
+                    NSLog(@"error: %@", error);
+                }
+                //NSLog(@"tok: %@", tok1);
             }
         }
     }

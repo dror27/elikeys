@@ -195,11 +195,12 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="66i-qZ-Iz2">
-                                <rect key="frame" x="90" y="123" width="153" height="32"/>
+                                <rect key="frame" x="52" y="123" width="230" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <segments>
                                     <segment title="Banked"/>
                                     <segment title="Predictor"/>
+                                    <segment title="Memory"/>
                                 </segments>
                                 <connections>
                                     <action selector="modeChanged:" destination="BYZ-38-t0r" eventType="touchUpInside" id="aNf-4S-fTs"/>

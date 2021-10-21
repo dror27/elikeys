@@ -11,6 +11,7 @@
 #import <MIKMIDI/MIKMIDI.h>
 #import "PTMKeyController.h"
 #import "BankedKeyController.h"
+#import "MemoryKeyController.h"
 #import "DBConnection.h"
 #import "ToneGenerator.h"
 #import "SpeechController.h"
@@ -46,6 +47,7 @@
     [self setAllKeyControllers:[NSArray arrayWithObjects:
                                 [[BankedKeyController alloc] initWith:self],
                                 [[PTMKeyController alloc] initWith:self],
+                                [[MemoryKeyController alloc] initWith:self],
                                 nil]];
     [self setKeyController:[_allKeyControllers objectAtIndex:0]];
     [_keyController reset];

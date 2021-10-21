@@ -23,6 +23,7 @@ typedef enum {
 @property NSUInteger lastChipIndex;
 @property NSUInteger chipCount;
 @property ChipType chipType;
+@property NSUInteger selectionCount;
 @end
 
 @implementation MemoryKeyController
@@ -51,11 +52,20 @@ typedef enum {
 }
 
 -(void)reset {
+    [self allDone:nil];
+}
+
+-(void)allDone:(id)obj {
+    _lastChipIndex = -1;
     [self dealChips];
     
     [[_vc speech] flushSpeechQueue];
+    if ( obj != nil )
+        [[_vc speech] speak:[NSString stringWithFormat:@"%ld מהלכים", _selectionCount]];
     [[_vc speech] speak:[NSString stringWithFormat:@"%ld קלפים חדשים", [self chipsLeft]]];
+    _selectionCount = 0;
 }
+
 
 -(void)keyPress:(NSUInteger)keyTag keyFilterIndex:(NSUInteger)filterIndex {
     
@@ -73,6 +83,7 @@ typedef enum {
             [self reset];
         }
     } else if ( filterIndex == 0 ){
+        _selectionCount++;
         NSUInteger         index = keyTag - 1;
         if ( index >= [_chips count] ) {
             [_vc beepError];
@@ -95,9 +106,8 @@ typedef enum {
                         [_chips setObject:@"" atIndexedSubscript:_lastChipIndex];
                         [_chips setObject:@"" atIndexedSubscript:index];
                         [[_vc tones] keyLongPressed];
-                        _lastChipIndex = -1;
                         if ( ![self chipsLeft] ) {
-                            [self performSelector:@selector(reset) withObject:nil afterDelay:1.0];
+                            [self performSelector:@selector(allDone:) withObject:self afterDelay:1.0];
                         }
                     } else {
                         _lastChipIndex = index;

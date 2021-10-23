@@ -35,20 +35,51 @@ OSStatus RenderTone(
     assert(ioData->mNumberBuffers == toneGenerator->_numChannels);
     
     for (size_t chan = 0; chan < toneGenerator->_numChannels; chan++) {
-        double theta = toneGenerator->_channels[chan].theta;
-        double amplitude = toneGenerator->_channels[chan].amplitude;
-        double theta_increment = 2.0 * M_PI * toneGenerator->_channels[chan].frequency / toneGenerator->_sampleRate;
+        TGChannelInfo* ci = &toneGenerator->_channels[chan];
+        double theta = ci->theta;
+        double amplitude = ci->amplitude;
+        double theta_increment = 2.0 * M_PI * ci->frequency / toneGenerator->_sampleRate;
         
         Float32 *buffer = (Float32 *)ioData->mBuffers[chan].mData;
         // Generate the samples
         for (UInt32 frame = 0; frame < inNumberFrames; frame++) {
             buffer[frame] = sin(theta) * amplitude;
             
+            // in case we are generating notes, adjust
+            if ( ci->notes[0].frequency ) {
+                
+                TGNoteInfo* note = &ci->notes[ci->currentNodeIndex];
+                
+                // initialize number of samples on current node
+                if ( !note->samples ) {
+                    note->samples = (NSUInteger)(note->duration * toneGenerator->_sampleRate);
+                    note->theta_increment = 2.0 * M_PI * note->frequency / toneGenerator->_sampleRate;
+                
+                    //NSLog(@"chan: %lu, note: %lu, frame: %d, theta_increment: %f", chan, ci->currentNodeIndex, (int)frame, note->theta_increment);
+                }
+                
+                // update theta_increment
+                theta_increment = note->theta_increment;
+                ci->currentSampleOnNote++;
+                
+                // move to next note?
+                if ( ci->currentSampleOnNote >= note->samples ) {
+                    note->samples = 0;      // this is temp
+                    ci->currentNodeIndex++;
+                    if ( (ci->currentNodeIndex >= SINE_WAVE_TONE_GENERATOR_NOTE_COUNT)
+                        || !ci->notes[ci->currentNodeIndex].frequency ) {
+                        ci->currentNodeIndex = 0;
+                    }
+                    ci->currentSampleOnNote = 0;
+                }
+            }
+
             theta += theta_increment;
             // Basically do modulo
             if (theta > 2.0 * M_PI) {
                 theta -= 2.0 * M_PI;
             }
+            
         }
         
         // Store the theta back in the view controller
@@ -126,7 +157,13 @@ OSStatus RenderTone(
 		OSErr err = AudioUnitInitialize(_toneUnit);
 		NSAssert1(err == noErr, @"Error initializing unit: %hd", err);
 		
-		// Start playback
+        // Initialize notes
+        for (size_t i = 0; i < _numChannels; i++) {
+            _channels[i].currentNodeIndex = 0;
+            _channels[i].currentSampleOnNote = 0;
+        }
+        
+        // Start playback
 		err = AudioOutputUnitStart(_toneUnit);
 		NSAssert1(err == noErr, @"Error starting unit: %hd", err);
 	}

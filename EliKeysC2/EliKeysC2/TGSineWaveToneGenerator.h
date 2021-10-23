@@ -32,10 +32,23 @@
 #define SINE_WAVE_TONE_GENERATOR_AMPLITUDE_FULL 0.25f
 #define SINE_WAVE_TONE_GENERATOR_AMPLITUDE_DEFAULT SINE_WAVE_TONE_GENERATOR_AMPLITUDE_MEDIUM
 
+#define SINE_WAVE_TONE_GENERATOR_NOTE_COUNT     24
+
+typedef struct {
+    double  frequency;              // 0 here means empty
+    NSTimeInterval duration;
+    NSUInteger samples;
+    double theta_increment;
+} TGNoteInfo;
+
 typedef struct {
     double frequency;
     double amplitude;
     double theta;
+    
+    TGNoteInfo notes[SINE_WAVE_TONE_GENERATOR_NOTE_COUNT];
+    NSUInteger currentNodeIndex;
+    NSUInteger currentSampleOnNote;
 } TGChannelInfo;
 
 @interface TGSineWaveToneGenerator : NSObject {

@@ -12,6 +12,10 @@
 -(void)keyPressed;
 -(void)keyLongPressed;
 
+-(void)twoToneRising;
+-(void)twoToneFalling;
+-(void)chromaticScaleRising:(int)noteCount;
+
 @end
 
 #endif /* ToneGenerator_h */

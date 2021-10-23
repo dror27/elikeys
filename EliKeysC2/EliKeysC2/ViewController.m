@@ -53,6 +53,7 @@
     [_keyController reset];
     
     NSLog(@"viewDidLoad: Done");
+    //[_tones chromaticScaleRising:6];
     
 }
 

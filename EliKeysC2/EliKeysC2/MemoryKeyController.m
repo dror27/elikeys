@@ -105,7 +105,7 @@ typedef enum {
                     if ( [otherChip isEqualToString:chip] ) {
                         [_chips setObject:@"" atIndexedSubscript:_lastChipIndex];
                         [_chips setObject:@"" atIndexedSubscript:index];
-                        [[_vc tones] keyLongPressed];
+                        [[_vc tones] chromaticScaleRising:6];
                         if ( ![self chipsLeft] ) {
                             [self performSelector:@selector(allDone:) withObject:self afterDelay:1.0];
                         }

@@ -13,6 +13,8 @@
 @interface SpeechController ()
 @property AVSpeechSynthesisVoice* voice;
 @property AVSpeechSynthesizer* synth;
+@property float rate;
+@property float volume;
 @end
 
 @implementation SpeechController
@@ -21,6 +23,8 @@
 {
     self = [super init];
     if (self) {
+        _rate = 0.5;
+        _volume = 0.5;
         [self loadVoice];
     }
     return self;
@@ -38,10 +42,10 @@
     AVSpeechUtterance*   utterance = [AVSpeechUtterance speechUtteranceWithString:text];
     
     utterance.voice = _voice;
-    utterance.rate = 0.5;
+    utterance.rate = _rate;
     utterance.pitchMultiplier = 0.8;
     utterance.postUtteranceDelay = 0.1;
-    utterance.volume = 0.6;
+    utterance.volume = _volume;
     
     
     [_synth speakUtterance:utterance];

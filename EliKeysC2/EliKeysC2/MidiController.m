@@ -77,13 +77,21 @@
         } else if ( ct == MIKMIDICommandTypeControlChange ) {
             MIKMIDIControlChangeCommand* c = (MIKMIDIControlChangeCommand*)cmd;
             NSLog(@"ControlChange: %ld, %ld", [c controllerNumber], [c controllerValue]);
-            if ( [c controllerNumber] == 22 ) {
-                if ( [c controllerValue] == 127 ) {
+            NSUInteger      ctrl = [c controllerNumber];
+            NSUInteger      value = [c controllerValue];
+            if ( ctrl == 22 ) {
+                if ( value == 127 ) {
                     //[[_vc tones] keyPressed];
                     [_vc key:@"X" pressed:TRUE];
                 } else {
                     [_vc key:@"X" pressed:FALSE];
                 }
+            } else if ( ctrl == 1 ) {
+                [_vc controller:0 changedTo:value];
+            } else if ( ctrl == 10 ) {
+                [_vc controller:1 changedTo:value];
+            } else if ( ctrl == 11 ) {
+                [_vc controller:2 changedTo:value];
             }
         }
     }

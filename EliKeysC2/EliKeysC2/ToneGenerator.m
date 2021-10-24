@@ -27,10 +27,10 @@
 #define FREQ_SCALE_A            @[@440, @466.16, @493.88, @523.25, @554.37, @587.33, @622.25, @659.25, @698.46, @739.99, @783.99, @830.61, @880]
 
 
-#define AMP_MID                 0.2
 
 @interface ToneGenerator ()
 @property TGSineWaveToneGenerator* gen;
+@property float volume;
 @end
 
 @implementation ToneGenerator
@@ -39,6 +39,7 @@
 {
     self = [super init];
     if (self) {
+        _volume = 0.5;
         [self setGen:[[TGSineWaveToneGenerator alloc] initWithChannels:1]];
     }
     return self;
@@ -47,7 +48,7 @@
 -(void)beep:(int)frequency withDuration:(float)duration {
     [_gen stop];
     _gen->_channels[0].frequency = frequency;
-    _gen->_channels[0].amplitude = AMP_MID;
+    _gen->_channels[0].amplitude = _volume / 2;
     _gen->_channels[0].notes[0].frequency = 0;
     [_gen playForDuration:duration];
 }
@@ -73,7 +74,7 @@
     assert([notes count] <= SINE_WAVE_TONE_GENERATOR_NOTE_COUNT);
     assert([notes count] > 0);
     _gen->_channels[0].frequency = [[notes objectAtIndex:0] intValue];
-    _gen->_channels[0].amplitude = AMP_MID;
+    _gen->_channels[0].amplitude = _volume / 2;
     for ( size_t n = 0 ; n < [notes count] ; n++ ) {
         _gen->_channels[0].notes[n].frequency = [[notes objectAtIndex:n] intValue];
         _gen->_channels[0].notes[n].duration = duration;

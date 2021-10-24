@@ -13,6 +13,9 @@
 -(void)flushSpeechQueue;
 -(NSString*)prepareForSpeech:(NSString*)text;
 
+-(void)setRate:(float)rate;
+-(void)setVolume:(float)volume;
+
 @end
 
 

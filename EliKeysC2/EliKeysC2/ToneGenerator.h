@@ -19,6 +19,8 @@
 -(void)twoToneFalling;
 -(void)chromaticScaleRising:(int)noteCount;
 
+-(void)setVolume:(float)volume;
+
 @end
 
 #endif /* ToneGenerator_h */

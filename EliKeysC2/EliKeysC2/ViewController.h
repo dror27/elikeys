@@ -16,6 +16,7 @@
 -(ToneGenerator*)tones;
 -(SpeechController*)speech;
 -(void)key:(NSString*)key pressed:(BOOL)b;
+-(void)controller:(NSUInteger)ctrl changedTo:(NSUInteger)value;
 -(void)beepOK;
 -(void)beepError;
 

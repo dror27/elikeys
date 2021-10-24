@@ -9,10 +9,13 @@
 #define ToneGenerator_h
 
 @interface ToneGenerator : NSObject
+-(void)beepOK;
+-(void)beepError;
+
 -(void)keyPressed;
 -(void)keyLongPressed;
 
--(void)twoToneRising;
+-(void)multiToneRisingShort;
 -(void)twoToneFalling;
 -(void)chromaticScaleRising:(int)noteCount;
 

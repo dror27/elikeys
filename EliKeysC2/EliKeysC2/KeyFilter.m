@@ -23,7 +23,7 @@
 // defaults
 #define     DEF_IGNORE_OTHER    FALSE
 #define     DEF_TIMELINE_LIMIT  100
-#define     DEF_DEBUG           TRUE
+#define     DEF_DEBUG           FALSE
 
 @interface KeyFilter ()
 @property NSString*       name;

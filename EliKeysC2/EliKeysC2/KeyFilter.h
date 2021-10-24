@@ -9,10 +9,11 @@
 #define KeyFilter_h
 
 // patterns
-#define     KEYFILTER_P_NORMAL            @"P((T)*(I)?)?R$"
-#define     KEYFILTER_P_LONG              @"PTTTTT$"
-#define     KEYFILTER_P_IMMEDIATE         @"P$"
-#define     KEYFILTER_P_EXCUSIVE          @"[^rp0-9]{20}$"
+#define     KEYFILTER_P_NORMAL            @"P((T)*(I)?)?R$"    /* requires a push and a release */
+#define     KEYFILTER_P_LONG              @"PTTTTT$"           /* triggers 500ms after a push */
+#define     KEYFILTER_P_IMMEDIATE         @"P$"                /* triggers immediatly after a push */
+#define     KEYFILTER_P_EXCLUSIVE         @"[^rp0-9]{20}$"     /* triggers when a key has been exclusive for 2s */
+#define     KEYFILTER_P_EXCLUSIVE_REPEAT  @"(?=[^rp0-9]{20}$)(([^PR]*[PR][^PR]*){4,}$)" /* at least two exclusing RP within a 2s interval */
 
 @interface KeyFilterExpr : NSObject
 -(KeyFilterExpr*)initWithPattern:(NSString*)pattern;

@@ -84,7 +84,6 @@
 		E240E2DB2718B06D001939EE /* PTMKeyController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTMKeyController.m; sourceTree = "<group>"; };
 		E240E2E12718B081001939EE /* PTMKeyController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTMKeyController.h; sourceTree = "<group>"; };
 		E240E2E22718B683001939EE /* KeyController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyController.h; sourceTree = "<group>"; };
-		E2756CD6271193D800557267 /* Todo.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Todo.rtf; sourceTree = "<group>"; };
 		E2756CD72711A63F00557267 /* MIKMIDI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MIKMIDI.xcodeproj; path = ../../MIKMIDI/Framework/MIKMIDI.xcodeproj; sourceTree = "<group>"; };
 		E27B9C39271EFA3A003F8B55 /* words.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = words.db; sourceTree = "<group>"; };
 		E2964F2D272160B80030EDB2 /* MemoryKeyController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MemoryKeyController.m; sourceTree = "<group>"; };
@@ -254,7 +253,6 @@
 				E2E5557C270C643D007FBBC2 /* ViewController.h */,
 				E2E5557D270C643D007FBBC2 /* ViewController.m */,
 				E2E5557F270C643D007FBBC2 /* Main.storyboard */,
-				E2756CD6271193D800557267 /* Todo.rtf */,
 				E22C09E12712D8180015CC26 /* Settings.bundle */,
 			);
 			path = EliKeysC2;

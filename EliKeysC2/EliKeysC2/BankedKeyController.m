@@ -23,6 +23,8 @@
 @property BOOL sliderShift;
 @end
 
+#define LETTER_MODE_COUNT       2
+
 @implementation BankedKeyController
 
 NSString        *letterKeys[3] = {
@@ -54,7 +56,10 @@ NSString        *modeSpeechText[3] = {
     KeyFilterExpr*        f1 = [[KeyFilterExpr alloc] initFromUserData:@"banked_keyfilter_1" withDefaultPattern: KEYFILTER_P_IMMEDIATE];
     [f1 setEmits:FALSE];
 
+    /*
     KeyFilterExpr*        f2 = [[KeyFilterExpr alloc] initFromUserData:@"banked_keyfilter_2" withDefaultPattern: KEYFILTER_P_LONG];
+     */
+    KeyFilterExpr*        f2 = [[KeyFilterExpr alloc] initWithPattern:KEYFILTER_P_EXCLUSIVE_REPEAT];
 
     // hardcoded for now
     return [NSArray arrayWithObjects: f1, f2, nil];
@@ -87,12 +92,14 @@ NSString        *modeSpeechText[3] = {
         if ( _completionWords == nil ) {
             NSString*   letter = [NSString stringWithFormat:@"%C", [letterKeys[letterMode] characterAtIndex:buttonIndex - 1]];
             [_wacc append:letter];
-            [_vc beepOK];
+            //[_vc beepOK];
+            [[_vc tones] multiToneRisingShort];
         } else {
             NSString* word = [self completionWordAtKey:buttonIndex];
             if ( word != nil ) {
                 [_wacc completeLastWord:word];
-                [_vc beepOK];
+                //[_vc beepOK];
+                [[_vc tones] multiToneRisingShort];
             } else {
                 [_vc beepError];
             }
@@ -117,7 +124,7 @@ NSString        *modeSpeechText[3] = {
                 } else
                     [self shift:-1];
             } else {
-                letterMode = (letterMode + 1) % 3;
+                letterMode = (letterMode + 1) % LETTER_MODE_COUNT;
             }
             [_speech speak:modeSpeechText[letterMode]];
         } else {
@@ -125,7 +132,7 @@ NSString        *modeSpeechText[3] = {
             [_vc beepError];
         }
     } else if ( buttonIndex == 13 ) {
-        [self speakAcc];
+        [self speakAccLetterByLetter];
     }
 }
 
@@ -154,6 +161,19 @@ NSString        *modeSpeechText[3] = {
         [_speech speak:[_speech prepareForSpeech:[_wacc asString]]];
 }
     
+-(void)speakAccLetterByLetter {
+    NSString*   text = [_wacc asString];
+    for ( int i = 0 ; i < [text length] ; i++ ) {
+        unichar     c = [text characterAtIndex:i];
+        if ( c == ' ' ) {
+            [_speech speak:@"רווח"];
+        } else {
+            [_speech speak:[NSString stringWithFormat:@"%C", c]];
+        }
+    }
+}
+
+
 -(NSString*)prepForSpeech:(NSString*)text {
     
     NSMutableString*    result = [[NSMutableString alloc] init];
@@ -200,7 +220,10 @@ NSString        *modeSpeechText[3] = {
     } else if ( buttonIndex == 14 ) {
         return @"לוחות";
     } else if ( buttonIndex == 13 ) {
-        return @"הקראה";
+        if ( [_wacc length] )
+            return [_speech prepareForSpeech:[_wacc asString]];
+        else
+            return @"הקראה";
     } else {
         return @"";
     }

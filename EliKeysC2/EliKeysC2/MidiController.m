@@ -68,7 +68,7 @@
         MIKMIDICommandType ct = [cmd commandType];
         if ( ct == MIKMIDICommandTypeNoteOn ) {
             NSString*                    key = [self midiNoteToKey:(int)[(MIKMIDINoteCommand*)cmd note]];
-            [[_vc tones] keyPressed];
+            //[[_vc tones] keyPressed];
             [_vc key:key pressed:TRUE];
         }
         else if ( ct == MIKMIDICommandTypeNoteOff ) {
@@ -79,7 +79,7 @@
             NSLog(@"ControlChange: %ld, %ld", [c controllerNumber], [c controllerValue]);
             if ( [c controllerNumber] == 22 ) {
                 if ( [c controllerValue] == 127 ) {
-                    [[_vc tones] keyPressed];
+                    //[[_vc tones] keyPressed];
                     [_vc key:@"X" pressed:TRUE];
                 } else {
                     [_vc key:@"X" pressed:FALSE];

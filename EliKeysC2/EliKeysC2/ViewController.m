@@ -64,7 +64,7 @@
                                   usingBlock:^(KeyFilter *keyFilter, NSUInteger exprIndex) {
             [_keyController keyPress:[[keyFilter name] intValue] keyFilterIndex:exprIndex];
         }];
-        [filter setDebug:FALSE];
+        //[filter setDebug:FALSE];
         [_keyFilters setObject:filter forKey:key];
     }
     return filter;
@@ -94,10 +94,10 @@
 }
 
 -(void)beepOK {
-    AudioServicesPlaySystemSound(1003);
+    [_tones beepOK];
 }
 -(void)beepError {
-    AudioServicesPlaySystemSound(1004);
+    [_tones beepError];
 }
 
 - (void)testDb {

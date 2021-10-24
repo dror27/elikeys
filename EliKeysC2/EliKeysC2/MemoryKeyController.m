@@ -34,7 +34,7 @@ typedef enum {
     self = [super init];
     if (self) {
         [self setVc:vc];
-        _chipCount = 8;
+        _chipCount = 4;
         _chipType = Card;
     }
     return self;

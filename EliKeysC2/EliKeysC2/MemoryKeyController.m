@@ -84,7 +84,7 @@ typedef enum {
         }
     } else if ( filterIndex == 0 ){
         _selectionCount++;
-        NSUInteger         index = keyTag - 1;
+        NSUInteger         index = [self transposeRowColOrientation:keyTag - 1];
         if ( index >= [_chips count] ) {
             [_vc beepError];
             _lastChipIndex = -1;
@@ -184,5 +184,11 @@ typedef enum {
     return [NSString stringWithFormat:@"%d", rand()];
 }
 
+-(NSUInteger)transposeRowColOrientation:(NSUInteger)index {
+    NSUInteger      row = index / 4;
+    NSUInteger      col = index % 4;
+    
+    return col * 4 + row;
+}
 
 @end

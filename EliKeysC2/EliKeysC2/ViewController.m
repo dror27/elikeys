@@ -85,7 +85,8 @@
 -(void)controller:(NSUInteger)ctrl changedTo:(NSUInteger)value {
     
     if ( ctrl == 0 ) {
-        [_speech setRate:value / 127.0];
+        /* 0.25 - 0.75 */
+        [_speech setRate:0.25 + value / 127.0 * (0.75 - 0.25)];
     }
     else if ( ctrl == 2 ) {
         [_speech setVolume:value / 127.0];

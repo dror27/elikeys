@@ -164,7 +164,7 @@ typedef enum {
         return [NSString stringWithFormat:@"%d", rand() % 24 + 1];
     } else if ( _chipType == Card ) {
         
-        NSArray<NSString*>*   cards = [@"2,3,4,5,6,7,8,9,10,נסיך,מלכה,מלך,אס" componentsSeparatedByString:@","];
+        NSArray<NSString*>*   cards = [@"2,3,4,5,6,7,8,9,10,נסיך,מלכה,מֶלֶךְ,אס" componentsSeparatedByString:@","];
         NSUInteger r = rand() % [cards count];
         return [cards objectAtIndex:r];
     } else if ( _chipType == Word ) {

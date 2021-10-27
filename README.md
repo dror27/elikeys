@@ -34,6 +34,7 @@ One method to define higher level events is by using regular expressions on the 
 - P(T*)?R$ - normal key depression
 - PTTTTT$ - long press (without a release)
 - [^rp0-9]{20}$ - an excusive key manipulation within a 2 second period
+- (?=[^rp0-9]{20}$)(([^PR]*[PR][^PR]*){4,}$)" - at least two exclusing RP within a 2s interval
 
 Note that the length of the timeline is good approximation of the time elapsed, as T events are repeatedly generated after P or R every 100ms. 
 An internal constant (currently set at 30) limits the number of T events and eventially generates an I (idle)

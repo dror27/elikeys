@@ -90,7 +90,10 @@ typedef enum {
         }
     } else if ( filterIndex == 0 ){
         _selectionCount++;
-        NSUInteger         index = [self transposeRowColOrientation:keyTag - 1];
+        NSUInteger         index =
+                [[NSUserDefaults standardUserDefaults] boolForKey:@"mem_vert"]
+                    ? [self transposeRowColOrientation:keyTag - 1]
+                    : (keyTag - 1);
         if ( index >= [_chips count] ) {
             [_vc beepError];
             _lastChipIndex = -1;

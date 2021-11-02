@@ -52,14 +52,20 @@ typedef enum {
 }
 
 -(void)reset {
-    [self allDone:nil];
+    [self allDone:nil withPrompt:nil];
 }
 
--(void)allDone:(id)obj {
+-(void)allDoneNoPrompt:(id)obj {
+    [self allDone:obj withPrompt:nil];
+}
+
+-(void)allDone:(id)obj withPrompt:(NSString*)msg {
     _lastChipIndex = -1;
     [self dealChips];
     
     [[_vc speech] flushSpeechQueue];
+    if ( msg != nil )
+        [[_vc speech] speak:msg];
     if ( obj != nil )
         [[_vc speech] speak:[NSString stringWithFormat:@"%ld מהלכים", _selectionCount]];
     [[_vc speech] speak:[NSString stringWithFormat:@"%ld קלפים חדשים", [self chipsLeft]]];
@@ -107,7 +113,7 @@ typedef enum {
                         [_chips setObject:@"" atIndexedSubscript:index];
                         [[_vc tones] chromaticScaleRising:6];
                         if ( ![self chipsLeft] ) {
-                            [self performSelector:@selector(allDone:) withObject:self afterDelay:1.0];
+                            [self performSelector:@selector(allDoneNoPrompt:) withObject:self afterDelay:1.0];
                         }
                     } else {
                         _lastChipIndex = index;
@@ -189,6 +195,11 @@ typedef enum {
     NSUInteger      col = index % 4;
     
     return col * 4 + row;
+}
+
+-(void)enter {
+    [[_vc speech] flushSpeechQueue];
+    [self allDone:nil withPrompt:@"מִשְׂחַק זִכָּרוֹן"];
 }
 
 @end

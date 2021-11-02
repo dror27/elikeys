@@ -29,6 +29,8 @@
 @property NSMutableDictionary<NSString*,KeyFilter*>* keyFilters;
 @property (weak, nonatomic) IBOutlet UIMenu *modeMenu;
 @property (weak, nonatomic) IBOutlet UICommand *modePredictor;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *modeControl;
+@property (weak, nonatomic) IBOutlet UILabel *waccControl;
 @end
 
 @implementation ViewController
@@ -50,7 +52,8 @@
                                 [[MemoryKeyController alloc] initWith:self],
                                 nil]];
     [self setKeyController:[_allKeyControllers objectAtIndex:0]];
-    [_keyController reset];
+    [_keyController enter];
+    [self updateWAccDisplay];
     
     NSLog(@"viewDidLoad: Done");
     //[_tones chromaticScaleRising:6];
@@ -63,6 +66,7 @@
         filter = [[KeyFilter alloc] initName:key andExpressions:[_keyController filtersForKey:[key intValue]]
                                   usingBlock:^(KeyFilter *keyFilter, NSUInteger exprIndex) {
             [_keyController keyPress:[[keyFilter name] intValue] keyFilterIndex:exprIndex];
+            [self updateWAccDisplay];
         }];
         //[filter setDebug:FALSE];
         [_keyFilters setObject:filter forKey:key];
@@ -79,7 +83,7 @@
             if (b) [f otherPressed]; else [f otherReleased];
         }
     }
-
+    [self updateWAccDisplay];
 }
 
 -(void)controller:(NSUInteger)ctrl changedTo:(NSUInteger)value {
@@ -87,13 +91,15 @@
     if ( ctrl == 0 ) {
         /* 0.25 - 0.75 */
         [_speech setRate:0.25 + value / 127.0 * (0.75 - 0.25)];
-    }
-    else if ( ctrl == 2 ) {
+    } else if ( ctrl == 2 ) {
         [_speech setVolume:value / 127.0];
-    }
-    else if ( ctrl == 1 ) {
+    } else if ( ctrl == 1 ) {
         [_tones setVolume:value / 127.0];
+    } else if ( ctrl == 3 ) {
+        [self nextMode];
     }
+    
+    [self updateWAccDisplay];
 }
 
 
@@ -127,11 +133,22 @@
     [_speech flushSpeechQueue];
     [_keyFilters removeAllObjects];
     [self setKeyController:[_allKeyControllers objectAtIndex:index]];
-    [_keyController reset];
+    [_keyController enter];
+    [self updateWAccDisplay];
 }
 
 - (IBAction)modeValueChanged:(UISegmentedControl *)sender {
     [self switchKeyController:sender.selectedSegmentIndex];
 }
 
+-(void)nextMode {
+    NSUInteger      mode = (_modeControl.selectedSegmentIndex + 1) % _modeControl.numberOfSegments;
+    _modeControl.selectedSegmentIndex = mode;
+    [self modeValueChanged:_modeControl];
+}
+
+-(void)updateWAccDisplay {
+    NSString*       text = [[_wacc asString] stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+    [_waccControl setText:text];
+}
 @end

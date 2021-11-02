@@ -185,5 +185,11 @@
     return [[@"X,1,2,3,4,N,A,S,C,B1,B2,B3,B4,B5,N6,B7,B8" componentsSeparatedByString:@","] objectAtIndex:tag];
 }
 
+-(void)enter {
+    [_speech flushSpeechQueue];
+    [_speech speak:@"אחת מארבע"];
+    [self reset];
+}
+
 @end
 

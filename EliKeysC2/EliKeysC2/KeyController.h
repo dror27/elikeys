@@ -14,6 +14,7 @@
 -(NSArray<KeyFilterExpr*>*)filtersForKey:(NSUInteger)keyTag;
 -(void)reset;
 -(void)keyPress:(NSUInteger)keyTag keyFilterIndex:(NSUInteger)filterIndex;
+-(void)enter;
 @end
 
 #endif /* KeyController_h */

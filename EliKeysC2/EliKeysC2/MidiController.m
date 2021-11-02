@@ -92,6 +92,10 @@
                 [_vc controller:1 changedTo:value];
             } else if ( ctrl == 11 ) {
                 [_vc controller:2 changedTo:value];
+            } else if ( ctrl == 20 ) {
+                [_vc controller:3 changedTo:value];
+            } else if ( ctrl == 21 ) {
+                [_vc controller:4 changedTo:value];
             }
         }
     }

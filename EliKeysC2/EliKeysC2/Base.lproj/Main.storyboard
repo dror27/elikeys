@@ -188,14 +188,35 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Mode:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nra-es-BbX">
-                                <rect key="frame" x="28" y="128" width="48" height="21"/>
+                                <rect key="frame" x="28" y="83" width="48" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Pot-U:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="acc-BT-Mfa">
+                                <rect key="frame" x="28" y="121" width="50" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Pot-D:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bOZ-Jf-In5">
+                                <rect key="frame" x="26" y="158" width="50" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Slider" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FVC-vh-0eB">
+                                <rect key="frame" x="27" y="195" width="44" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="66i-qZ-Iz2">
-                                <rect key="frame" x="84" y="123" width="230" height="32"/>
+                                <rect key="frame" x="84" y="78" width="230" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <segments>
                                     <segment title="Banked"/>
@@ -207,8 +228,29 @@
                                     <action selector="modeValueChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="BoZ-PO-HJa"/>
                                 </connections>
                             </segmentedControl>
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="64" minValue="0.0" maxValue="127" translatesAutoresizingMaskIntoConstraints="NO" id="DPa-De-UVa">
+                                <rect key="frame" x="87" y="117" width="229" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="controllerSimulatorValueChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="92O-gG-Xeq"/>
+                                </connections>
+                            </slider>
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="64" minValue="0.0" maxValue="127" translatesAutoresizingMaskIntoConstraints="NO" id="DFi-j2-L4i">
+                                <rect key="frame" x="87" y="154" width="229" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="controllerSimulatorValueChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="H7V-NT-cfe"/>
+                                </connections>
+                            </slider>
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="64" minValue="0.0" maxValue="127" translatesAutoresizingMaskIntoConstraints="NO" id="Ow1-kR-DPY">
+                                <rect key="frame" x="87" y="191" width="229" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="controllerSimulatorValueChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="Hdi-FD-Qye"/>
+                                </connections>
+                            </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="?" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QUL-Zg-lud">
-                                <rect key="frame" x="28" y="208" width="337" height="98"/>
+                                <rect key="frame" x="26" y="224" width="337" height="98"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                 <nil key="textColor"/>
@@ -219,7 +261,10 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <connections>
+                        <outlet property="lowerPotSimulator" destination="DFi-j2-L4i" id="EhC-Ug-MUs"/>
                         <outlet property="modeControl" destination="66i-qZ-Iz2" id="aP5-QM-LwW"/>
+                        <outlet property="sliderSimulator" destination="Ow1-kR-DPY" id="fmN-BC-kwb"/>
+                        <outlet property="upperPotSimulator" destination="DPa-De-UVa" id="Ioq-wE-W7m"/>
                         <outlet property="waccControl" destination="QUL-Zg-lud" id="kYD-Ed-amL"/>
                     </connections>
                 </viewController>

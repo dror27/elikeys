@@ -48,11 +48,14 @@
 			<key>Key</key>
 			<string>banked_keyfilter_2</string>
 			<key>DefaultValue</key>
-			<string>PTTTTT$</string>
+			<string>PT{&lt;5,15&gt;}$</string>
 			<key>Titles</key>
 			<array>
 				<string>Normal</string>
-				<string>Long</string>
+				<string>Long (500ms)</string>
+				<string>Long (700ms)</string>
+				<string>Long (900ms)</string>
+				<string>Long (adjust)</string>
 				<string>Immediate</string>
 				<string>Exclusive</string>
 				<string>Repeated Exclusive</string>
@@ -62,6 +65,9 @@
 			<array>
 				<string>P((T)*(I)?)?R$</string>
 				<string>PTTTTT$</string>
+				<string>PTTTTTTT$</string>
+				<string>PTTTTTTTTT$</string>
+				<string>PT{&lt;5,15&gt;}$</string>
 				<string>P$</string>
 				<string>[^rp0-9]{20}$</string>
 				<string>(?=[^rp0-9]{20}$)(([^PR]*[PR][^PR]*){4,}$)</string>

@@ -56,7 +56,7 @@ NSString        *modeSpeechText[3] = {
     KeyFilterExpr*        f1 = [[KeyFilterExpr alloc] initFromUserData:@"banked_keyfilter_1" withDefaultPattern: KEYFILTER_P_IMMEDIATE];
     [f1 setEmits:FALSE];
 
-    KeyFilterExpr*        f2 = [[KeyFilterExpr alloc] initFromUserData:@"banked_keyfilter_2" withDefaultPattern: KEYFILTER_P_LONG];
+    KeyFilterExpr*        f2 = [[KeyFilterExpr alloc] initFromUserData:@"banked_keyfilter_2" withDefaultPattern: KEYFILTER_P_LONG_ADJUST];
     /*
     KeyFilterExpr*        f2 = [[KeyFilterExpr alloc] initWithPattern:KEYFILTER_P_EXCLUSIVE_REPEAT];
      */

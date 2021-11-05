@@ -11,6 +11,7 @@
 // patterns
 #define     KEYFILTER_P_NORMAL            @"P((T)*(I)?)?R$"    /* requires a push and a release */
 #define     KEYFILTER_P_LONG              @"PTTTTT$"           /* triggers 500ms after a push */
+#define     KEYFILTER_P_LONG_ADJUST       @"PT{<5,15>}$"       /* triggers <programmable>ms after a push */
 #define     KEYFILTER_P_IMMEDIATE         @"P$"                /* triggers immediatly after a push */
 #define     KEYFILTER_P_EXCLUSIVE         @"[^rp0-9]{20}$"     /* triggers when a key has been exclusive for 2s */
 #define     KEYFILTER_P_EXCLUSIVE_REPEAT  @"(?=[^rp0-9]{20}$)(([^PR]*[PR][^PR]*){4,}$)" /* at least two exclusing RP within a 2s interval */
@@ -22,6 +23,7 @@
 -(BOOL)matches:(NSString*)text;
 -(BOOL)emits;
 -(void)setEmits:(BOOL)v;
+-(void)adjust:(NSUInteger)v;
 @end
 
 @interface KeyFilter : NSObject
@@ -31,6 +33,7 @@
 -(void)keyReleased;
 -(void)otherPressed;
 -(void)otherReleased;
+-(void)adjust:(NSUInteger)v;
 
 -(void)setDebug:(BOOL)debug;
 

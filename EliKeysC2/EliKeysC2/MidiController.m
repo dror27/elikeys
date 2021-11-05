@@ -87,15 +87,15 @@
                     [_vc key:@"X" pressed:FALSE];
                 }
             } else if ( ctrl == 1 ) {
-                [_vc controller:0 changedTo:value];
+                [_vc controller:MIDI_CTRL_SLIDER changedTo:value];
             } else if ( ctrl == 10 ) {
-                [_vc controller:1 changedTo:value];
+                [_vc controller:MIDI_CTRL_POT_UPPER changedTo:value];
             } else if ( ctrl == 11 ) {
-                [_vc controller:2 changedTo:value];
+                [_vc controller:MIDI_CTRL_POT_LOWER changedTo:value];
             } else if ( ctrl == 20 ) {
-                [_vc controller:3 changedTo:value];
+                [_vc controller:MIDI_CTRL_SW_A changedTo:value];
             } else if ( ctrl == 21 ) {
-                [_vc controller:4 changedTo:value];
+                [_vc controller:MIDI_CTRL_SW_B changedTo:value];
             }
         }
     }

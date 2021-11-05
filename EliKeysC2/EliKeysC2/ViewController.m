@@ -31,6 +31,9 @@
 @property (weak, nonatomic) IBOutlet UICommand *modePredictor;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *modeControl;
 @property (weak, nonatomic) IBOutlet UILabel *waccControl;
+@property (weak, nonatomic) IBOutlet UISlider *upperPotSimulator;
+@property (weak, nonatomic) IBOutlet UISlider *lowerPotSimulator;
+@property (weak, nonatomic) IBOutlet UISlider *sliderSimulator;
 @end
 
 @implementation ViewController
@@ -69,6 +72,7 @@
             [self updateWAccDisplay];
         }];
         //[filter setDebug:FALSE];
+        [filter adjust:[_upperPotSimulator value]];
         [_keyFilters setObject:filter forKey:key];
     }
     return filter;
@@ -88,20 +92,37 @@
 
 -(void)controller:(NSUInteger)ctrl changedTo:(NSUInteger)value {
     
-    if ( ctrl == 0 ) {
-        /* 0.25 - 0.75 */
-        [_speech setRate:0.25 + value / 127.0 * (0.75 - 0.25)];
-    } else if ( ctrl == 2 ) {
-        [_speech setVolume:value / 127.0];
-    } else if ( ctrl == 1 ) {
-        [_tones setVolume:value / 127.0];
-    } else if ( ctrl == 3 ) {
+    if ( ctrl == MIDI_CTRL_SLIDER ) {
+        [self adjustSpeed:value];
+        [_sliderSimulator setValue:value];
+    } else if ( ctrl == MIDI_CTRL_POT_LOWER ) {
+        [self adjustVolume:value];
+        [_lowerPotSimulator setValue:value];
+    } else if ( ctrl == MIDI_CTRL_POT_UPPER ) {
+        [self adjustKeyFilters:value];
+        [_upperPotSimulator setValue:value];
+    } else if ( ctrl == MIDI_CTRL_SW_A ) {
         [self nextMode];
     }
     
     [self updateWAccDisplay];
 }
 
+-(void)adjustSpeed:(NSUInteger)value {
+    /* 0.25 - 0.75 */
+    [_speech setRate:0.25 + value / 127.0 * (0.75 - 0.25)];
+}
+
+-(void)adjustVolume:(NSUInteger)value {
+    [_speech setVolume:value / 127.0];
+    [_tones setVolume:1.0 - value / 127.0];
+}
+
+-(void)adjustKeyFilters:(NSUInteger)value {
+    for ( KeyFilter* keyFilter in [_keyFilters allValues] ) {
+        [keyFilter adjust:value];
+    }
+}
 
 - (IBAction)keyTouchDown:(UIButton*)sender {
     NSLog(@"keyTouchDown: %@", sender.titleLabel.text);
@@ -150,5 +171,17 @@
 -(void)updateWAccDisplay {
     NSString*       text = [[_wacc asString] stringByReplacingOccurrencesOfString:@" " withString:@"_"];
     [_waccControl setText:text];
+}
+- (IBAction)upperPotSimulatorValueChanged:(UISlider *)sender {
+    [self adjustKeyFilters:[sender value]];
+}
+- (IBAction)controllerSimulatorValueChanged:(UISlider *)sender {
+    NSUInteger      value = [sender value];
+    if ( sender == _upperPotSimulator )
+        [self adjustKeyFilters:value];
+    else if ( sender == _lowerPotSimulator )
+        [self adjustVolume:value];
+    else if ( sender == _sliderSimulator )
+        [self adjustSpeed:value];
 }
 @end

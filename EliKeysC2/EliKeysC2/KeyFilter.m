@@ -137,34 +137,67 @@
     if ( !_ignoreOther )
         [self appendAndEval:E_OTHER_RELEASED];
 }
+
+-(void)adjust:(NSUInteger)v {
+    for ( KeyFilterExpr* expr in _exprs ) {
+        [expr adjust:v];
+    }
+}
+
 @end
 
 @interface KeyFilterExpr ()
 @property NSRegularExpression*  regex;
 @property BOOL                emits;
+
+@property NSUInteger adjLower;
+@property NSUInteger adjUpper;
+@property NSUInteger adjValue;
+@property NSString* adjPattern;
+@property NSRange adjRange;
 @end
 
 @implementation KeyFilterExpr
 
 -(KeyFilterExpr*)initWithPattern:(NSString*)pattern {
-    return [self initWithRegex:[NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil]];
+    
+    // check if pattern contains an adjustment clause
+    NSUInteger                 adjLower = 0;
+    NSUInteger                 adjUpper = 0;
+    NSUInteger                 adjValue = 0;
+    NSString*                  adjPattern = nil;
+    NSRange                    adjRange = NSMakeRange(0, 0);
+    NSRegularExpression*        adjRegex = [NSRegularExpression regularExpressionWithPattern:@"(<(\\d+),(\\d+)>)" options:0 error:nil];
+    NSTextCheckingResult*       adjResult = [adjRegex firstMatchInString:pattern options:0 range:NSMakeRange(0, [pattern length])];
+    if ( adjResult ) {
+        adjLower = [[pattern substringWithRange:[adjResult rangeAtIndex:2]] intValue];
+        adjUpper = [[pattern substringWithRange:[adjResult rangeAtIndex:3]] intValue];
+        adjValue = (adjLower + adjUpper) / 2;
+        adjPattern = pattern;
+        adjRange = [adjResult range];
+        pattern = [pattern stringByReplacingCharactersInRange:adjRange withString:[NSString stringWithFormat:@"%ld", adjValue]];
+        NSLog(@"pattern: %@", pattern);
+    }
+    
+    // create pattern
+    NSRegularExpression*        regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
+    KeyFilterExpr*  me = [self initWithRegex:regex];
+    
+    // copy adjustable properties
+    me.adjLower = adjLower;
+    me.adjUpper = adjUpper;
+    me.adjValue = adjValue;
+    me.adjPattern = adjPattern;
+    me.adjRange = adjRange;
+    return me;
 }
 
 -(KeyFilterExpr*)initFromUserData:(NSString*)key withDefaultPattern:(NSString*)pattern {
-    NSError*                error = nil;
     NSString*               userPattern = [[NSUserDefaults standardUserDefaults] stringForKey:key];
-    NSRegularExpression*    regex = nil;
-    if ( userPattern != nil ) {
-        regex = [NSRegularExpression regularExpressionWithPattern:userPattern options:0 error:&error];
-    }
-    if ( !regex || error ) {
-        if ( userPattern )
-            NSLog(@"Error: %@, on userPattern: %@", error, userPattern);
-        return [self initWithPattern:pattern];
-    } else {
-        return [self initWithRegex:regex];
-    }
+    if ( !userPattern )
+        userPattern = pattern;
     
+    return [self initWithPattern:pattern];
 }
 
 -(KeyFilterExpr*)initWithRegex:(NSRegularExpression*)regex {
@@ -178,6 +211,28 @@
 
 -(BOOL)matches:(NSString*)text {
     return [_regex numberOfMatchesInString:text options:0 range:NSMakeRange(0, [text length])] > 0;
+}
+
+-(void)adjust:(NSUInteger)v {
+    
+    // adjustable?
+    if ( _adjPattern ) {
+        
+        // calibrate range from 0-127
+        NSUInteger  oldValue = _adjValue;
+        _adjValue = _adjLower + (_adjUpper - _adjLower) * (v / 127.0);
+        
+        // new value?
+        if ( _adjValue != oldValue ) {
+            
+            // create new pattern
+            NSString* pattern = [_adjPattern stringByReplacingCharactersInRange:_adjRange withString:[NSString stringWithFormat:@"%ld", _adjValue]];
+            NSLog(@"pattern: %@", pattern);
+            
+            // create new regex
+            _regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
+        }
+    }
 }
 
 @end

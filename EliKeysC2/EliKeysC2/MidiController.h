@@ -9,6 +9,13 @@
 #define MidiController_h
 #import "ViewController.h"
 
+#define MIDI_CTRL_SLIDER        0
+#define MIDI_CTRL_POT_UPPER     1
+#define MIDI_CTRL_POT_LOWER     2
+#define MIDI_CTRL_SW_A          3
+#define MIDI_CTRL_SW_B          4
+
+
 @interface MidiController : NSObject
 -(MidiController*)initWith:(ViewController*)vc;
 @end

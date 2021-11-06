@@ -41,14 +41,8 @@ typedef enum {
 }
 
 -(NSArray<KeyFilterExpr*>*)filtersForKey:(NSUInteger)keyTag {
-    
-    KeyFilterExpr*        f1 = [[KeyFilterExpr alloc] initWithPattern:KEYFILTER_P_IMMEDIATE];
-    [f1 setEmits:FALSE];
-
-    KeyFilterExpr*        f2 = [[KeyFilterExpr alloc] initWithPattern:KEYFILTER_P_LONG];
-
-    // hardcoded for now
-    return [NSArray arrayWithObjects: f1, f2, nil];
+    // default
+    return nil;
 }
 
 -(void)reset {

@@ -29,6 +29,7 @@
 @property NSString*       name;
 @property NSArray<KeyFilterExpr*>* exprs;
 @property (copy) void (^block)(KeyFilter *keyFilter, NSUInteger exprIndex);
+@property (nonatomic,weak) EventLogger* eventLogger;
 
 
 @property NSMutableString*  timeline;
@@ -36,6 +37,7 @@
 @property BOOL            ignoreOther;
 @property NSUInteger  timelineLimit;
 @property BOOL          debug;
+
 
 
 -(void)appendAndEval:(NSString*)event;
@@ -144,6 +146,13 @@
     }
 }
 
+-(void)setEventLogger:(EventLogger *)eventLogger {
+    _eventLogger = eventLogger;
+    for ( KeyFilterExpr* expr in _exprs ) {
+        [expr setEventLogger:eventLogger];
+    }
+}
+
 @end
 
 @interface KeyFilterExpr ()
@@ -155,6 +164,7 @@
 @property NSUInteger adjValue;
 @property NSString* adjPattern;
 @property NSRange adjRange;
+@property (weak) EventLogger* eventLogger;
 @end
 
 @implementation KeyFilterExpr
@@ -178,6 +188,8 @@
         pattern = [pattern stringByReplacingCharactersInRange:adjRange withString:[NSString stringWithFormat:@"%ld", adjValue]];
         NSLog(@"pattern: %@", pattern);
     }
+    
+    [_eventLogger log:EL_TYPE_FILTER subtype:EL_SUBTYPE_FILTER_PATTERN value:pattern more:nil];
     
     // create pattern
     NSRegularExpression*        regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
@@ -228,7 +240,8 @@
             // create new pattern
             NSString* pattern = [_adjPattern stringByReplacingCharactersInRange:_adjRange withString:[NSString stringWithFormat:@"%ld", _adjValue]];
             NSLog(@"pattern: %@", pattern);
-            
+            [_eventLogger log:EL_TYPE_FILTER subtype:EL_SUBTYPE_FILTER_PATTERN value:pattern more:[NSString stringWithFormat:@"ul", v]];
+
             // create new regex
             _regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
         }

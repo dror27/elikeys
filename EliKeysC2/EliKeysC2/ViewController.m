@@ -6,6 +6,7 @@
 //
 
 #import "ViewController.h"
+#import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
 #import <MIKMIDI/MIKMIDI.h>
@@ -18,6 +19,7 @@
 #import "MidiController.h"
 #import "WordsAccumulator.h"
 #import "KeyFilter.h"
+#import "EventLogger.h"
 
 @interface ViewController ()
 @property WordsAccumulator* wacc;
@@ -27,6 +29,8 @@
 @property ToneGenerator* tones;
 @property MidiController* midi;
 @property NSMutableDictionary<NSString*,KeyFilter*>* keyFilters;
+@property EventLogger* eventLogger;
+
 @property (weak, nonatomic) IBOutlet UIMenu *modeMenu;
 @property (weak, nonatomic) IBOutlet UICommand *modePredictor;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *modeControl;
@@ -41,11 +45,15 @@
 -(void)viewDidLoad {
     [super viewDidLoad];
 
+    [self setEventLogger:[[EventLogger alloc] init]];
     [self setWacc:[[WordsAccumulator alloc] init]];
     [self setSpeech:[[SpeechController alloc] init]];
     [self setTones:[[ToneGenerator alloc] init]];
     [self setMidi:[[MidiController alloc] initWith:self]];
     [self setKeyFilters:[NSMutableDictionary dictionary]];
+    
+    [_wacc setEventLogger:_eventLogger];
+    [_speech setEventLogger:_eventLogger];
     
     //[self testDb];
 
@@ -60,18 +68,20 @@
     
     NSLog(@"viewDidLoad: Done");
     //[_tones chromaticScaleRising:6];
-    
 }
 
 -(KeyFilter*)filterForKey:(NSString*)key {
     KeyFilter*      filter = [_keyFilters objectForKey:key];
     if ( !filter ) {
-        filter = [[KeyFilter alloc] initName:key andExpressions:[_keyController filtersForKey:[key intValue]]
+        filter = [[KeyFilter alloc] initName:key andExpressions:[self filtersForKey:[key intValue] forKeyController:_keyController]
                                   usingBlock:^(KeyFilter *keyFilter, NSUInteger exprIndex) {
-            [_keyController keyPress:[[keyFilter name] intValue] keyFilterIndex:exprIndex];
+            int     keyIndex = [[keyFilter name] intValue];
+            [_eventLogger log:EL_TYPE_FILTER subtype:EL_SUBTYPE_FILTER_FIRE uintValue:keyIndex uintMore:exprIndex];
+            [_keyController keyPress:keyIndex keyFilterIndex:exprIndex];
             [self updateWAccDisplay];
         }];
         //[filter setDebug:FALSE];
+        [filter setEventLogger:_eventLogger];
         [filter adjust:[_upperPotSimulator value]];
         [_keyFilters setObject:filter forKey:key];
     }
@@ -79,6 +89,11 @@
 }
 
 -(void)key:(NSString*)key pressed:(BOOL)b {
+    
+    // log
+    [_eventLogger log:EL_TYPE_KEY subtype:b ? EL_SUBTYPE_KEY_PRESS : EL_SUBTYPE_KEY_RELEASE value:key more:nil];
+    
+    // process
     KeyFilter*      filter = [self filterForKey:key];
     for ( KeyFilter* f in [_keyFilters allValues] ) {
         if ( f == filter ) {
@@ -184,4 +199,20 @@
     else if ( sender == _sliderSimulator )
         [self adjustSpeed:value];
 }
+
+-(NSArray<KeyFilterExpr*>*)filtersForKey:(NSUInteger)keyTag forKeyController:(id<KeyController>) keyController {
+    
+    NSArray<KeyFilterExpr*>*    filters = [keyController filtersForKey:keyTag];
+    if ( filters )
+        return filters;
+    
+    // default
+    return [NSArray arrayWithObjects:
+            [[KeyFilterExpr alloc] initWithPattern:KEYFILTER_P_NORMAL],
+            [[KeyFilterExpr alloc] initWithPattern:KEYFILTER_P_LONG_ADJUST],
+            nil];
+}
+
+
+
 @end

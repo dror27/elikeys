@@ -67,15 +67,21 @@
     for ( MIKMIDICommand* cmd in commands ) {
         MIKMIDICommandType ct = [cmd commandType];
         if ( ct == MIKMIDICommandTypeNoteOn ) {
+            [[_vc eventLogger] log:EL_TYPE_MIDI subtype:EL_SUBTYPE_MIDI_NOTE_ON
+                          uintValue:[(MIKMIDINoteCommand*)cmd note] uintMore:[(MIKMIDINoteCommand*)cmd velocity]];
             NSString*                    key = [self midiNoteToKey:(int)[(MIKMIDINoteCommand*)cmd note]];
             //[[_vc tones] keyPressed];
             [_vc key:key pressed:TRUE];
         }
         else if ( ct == MIKMIDICommandTypeNoteOff ) {
+            [[_vc eventLogger] log:EL_TYPE_MIDI subtype:EL_SUBTYPE_MIDI_NOTE_OFF
+                          uintValue:[(MIKMIDINoteCommand*)cmd note] uintMore:[(MIKMIDINoteCommand*)cmd velocity]];
             NSString*                    key = [self midiNoteToKey:(int)[(MIKMIDINoteCommand*)cmd note]];
             [_vc key:key pressed:FALSE];
         } else if ( ct == MIKMIDICommandTypeControlChange ) {
             MIKMIDIControlChangeCommand* c = (MIKMIDIControlChangeCommand*)cmd;
+            [[_vc eventLogger] log:EL_TYPE_MIDI subtype:EL_SUBTYPE_MIDI_CTRL
+                          uintValue:[c controllerNumber] uintMore:[c controllerValue]];
             NSLog(@"ControlChange: %ld, %ld", [c controllerNumber], [c controllerValue]);
             NSUInteger      ctrl = [c controllerNumber];
             NSUInteger      value = [c controllerValue];

@@ -8,6 +8,8 @@
 #ifndef KeyFilter_h
 #define KeyFilter_h
 
+#import "EventLogger.h"
+
 // patterns
 #define     KEYFILTER_P_NORMAL            @"P((T)*(I)?)?R$"    /* requires a push and a release */
 #define     KEYFILTER_P_LONG              @"PTTTTT$"           /* triggers 500ms after a push */
@@ -24,6 +26,7 @@
 -(BOOL)emits;
 -(void)setEmits:(BOOL)v;
 -(void)adjust:(NSUInteger)v;
+-(void)setEventLogger:(EventLogger*)eventLogger;
 @end
 
 @interface KeyFilter : NSObject
@@ -34,6 +37,7 @@
 -(void)otherPressed;
 -(void)otherReleased;
 -(void)adjust:(NSUInteger)v;
+-(void)setEventLogger:(EventLogger*)eventLogger;
 
 -(void)setDebug:(BOOL)debug;
 

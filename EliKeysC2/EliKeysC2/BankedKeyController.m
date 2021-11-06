@@ -52,17 +52,8 @@ NSString        *modeSpeechText[3] = {
 }
 
 -(NSArray<KeyFilterExpr*>*)filtersForKey:(NSUInteger)keyTag {
-    
-    KeyFilterExpr*        f1 = [[KeyFilterExpr alloc] initFromUserData:@"banked_keyfilter_1" withDefaultPattern: KEYFILTER_P_IMMEDIATE];
-    [f1 setEmits:FALSE];
-
-    KeyFilterExpr*        f2 = [[KeyFilterExpr alloc] initFromUserData:@"banked_keyfilter_2" withDefaultPattern: KEYFILTER_P_LONG_ADJUST];
-    /*
-    KeyFilterExpr*        f2 = [[KeyFilterExpr alloc] initWithPattern:KEYFILTER_P_EXCLUSIVE_REPEAT];
-     */
-
-    // hardcoded for now
-    return [NSArray arrayWithObjects: f1, f2, nil];
+    // default
+    return nil;
 }
 
 -(void)reset {

@@ -9,12 +9,14 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
 #import "SpeechController.h"
+#import "EventLogger.h"
 
 @interface SpeechController ()
 @property AVSpeechSynthesisVoice* voice;
 @property AVSpeechSynthesizer* synth;
 @property float rate;
 @property float volume;
+@property (weak) EventLogger* eventLogger;
 @end
 
 @implementation SpeechController
@@ -38,6 +40,8 @@
 -(void)speak:(NSString*)text {
     
     text = [text stringByReplacingOccurrencesOfString:@"-" withString:@" "];
+    
+    [_eventLogger log:EL_TYPE_SPEECH subtype:EL_SUBTYPE_SPEECH_SPEAK value:text more:nil];
     
     AVSpeechUtterance*   utterance = [AVSpeechUtterance speechUtteranceWithString:text];
     

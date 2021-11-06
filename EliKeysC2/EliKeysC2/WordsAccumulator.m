@@ -10,6 +10,7 @@
 
 @interface WordsAccumulator ()
 @property NSMutableString*     words;
+@property (weak) EventLogger* eventLogger;
 @end
 
 @implementation WordsAccumulator
@@ -25,6 +26,7 @@
 
 -(void)clear {
     [_words setString:@""];
+    [_eventLogger log:EL_TYPE_WACC subtype:EL_SUBTYPE_NONE value:_words more:nil];
 }
 
 -(NSString*)asString {
@@ -33,12 +35,14 @@
 
 -(void)append:(NSString*)text {
     [_words appendString:text];
+    [_eventLogger log:EL_TYPE_WACC subtype:EL_SUBTYPE_NONE value:_words more:nil];
 }
 
 -(void)backspace:(int)count {
     if ( [_words length] >= count ) {
         [_words deleteCharactersInRange:NSMakeRange([_words length]-count, count)];
     }
+    [_eventLogger log:EL_TYPE_WACC subtype:EL_SUBTYPE_NONE value:_words more:nil];
 }
 
 -(NSString*)lastWord {
@@ -51,6 +55,7 @@
     
     [self append:suffix];
     [self append:@" "];
+    [_eventLogger log:EL_TYPE_WACC subtype:EL_SUBTYPE_NONE value:_words more:nil];
 }
 
 -(NSUInteger)length {

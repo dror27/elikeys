@@ -8,6 +8,8 @@
 #ifndef SpeechController_h
 #define SpeechController_h
 
+#import "EventLogger.h"
+
 @interface SpeechController : NSObject
 -(void)speak:(NSString*)text;
 -(void)flushSpeechQueue;
@@ -15,6 +17,8 @@
 
 -(void)setRate:(float)rate;
 -(void)setVolume:(float)volume;
+
+-(void)setEventLogger:(EventLogger*)eventLogger;
 
 @end
 

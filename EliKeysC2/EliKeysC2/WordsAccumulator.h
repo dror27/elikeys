@@ -8,6 +8,8 @@
 #ifndef WordsAccumulator_h
 #define WordsAccumulator_h
 
+#import "EventLogger.h"
+
 @interface WordsAccumulator : NSObject
 -(void)clear;
 -(NSString*)asString;
@@ -16,6 +18,7 @@
 -(NSString*)lastWord;
 -(void)completeLastWord:(NSString*)word;
 -(NSUInteger)length;
+-(void)setEventLogger:(EventLogger*)eventLogger;
 @end
 
 #endif /* WordsAccumulator_h */

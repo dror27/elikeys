@@ -36,12 +36,9 @@
 }
 
 -(NSArray<KeyFilterExpr*>*)filtersForKey:(NSUInteger)keyTag {
-    
-    // hardcoded for now
-    return [NSArray arrayWithObjects:
-            [[KeyFilterExpr alloc] initWithPattern:KEYFILTER_P_NORMAL],
-            [[KeyFilterExpr alloc] initWithPattern:KEYFILTER_P_LONG],
-            nil];
+
+    // default
+    return nil;
 }
 
 -(void)keyPress:(NSUInteger)keyTag keyFilterIndex:(NSUInteger)filterIndex {

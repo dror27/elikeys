@@ -19,6 +19,7 @@
 		E2964F2E272160B80030EDB2 /* MemoryKeyController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2964F2D272160B80030EDB2 /* MemoryKeyController.m */; };
 		E2964F32272165010030EDB2 /* NSMutableArray_Shuffling.m in Sources */ = {isa = PBXBuildFile; fileRef = E2964F31272165010030EDB2 /* NSMutableArray_Shuffling.m */; };
 		E2A6019B27184F50004762A4 /* KeyFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = E2A6019A27184F50004762A4 /* KeyFilter.m */; };
+		E2AC2EFD2736A04D0095ED3E /* EventLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E2AC2EFC2736A04D0095ED3E /* EventLogger.m */; };
 		E2DF5F3A271AD12A00EDC987 /* BankedKeyController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2DF5F39271AD12A00EDC987 /* BankedKeyController.m */; };
 		E2E55578270C643D007FBBC2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E55577270C643D007FBBC2 /* AppDelegate.m */; };
 		E2E5557B270C643D007FBBC2 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E5557A270C643D007FBBC2 /* SceneDelegate.m */; };
@@ -86,12 +87,15 @@
 		E240E2E22718B683001939EE /* KeyController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyController.h; sourceTree = "<group>"; };
 		E2756CD72711A63F00557267 /* MIKMIDI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MIKMIDI.xcodeproj; path = ../../MIKMIDI/Framework/MIKMIDI.xcodeproj; sourceTree = "<group>"; };
 		E27B9C39271EFA3A003F8B55 /* words.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = words.db; sourceTree = "<group>"; };
+		E284FD772735351E00FE0ACF /* OSLog.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OSLog.framework; path = System/Library/Frameworks/OSLog.framework; sourceTree = SDKROOT; };
 		E2964F2D272160B80030EDB2 /* MemoryKeyController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MemoryKeyController.m; sourceTree = "<group>"; };
 		E2964F2F272160C80030EDB2 /* MemoryKeyController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MemoryKeyController.h; sourceTree = "<group>"; };
 		E2964F30272164B30030EDB2 /* NSMutableArray_Shuffling.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSMutableArray_Shuffling.h; sourceTree = "<group>"; };
 		E2964F31272165010030EDB2 /* NSMutableArray_Shuffling.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSMutableArray_Shuffling.m; sourceTree = "<group>"; };
 		E2A6019A27184F50004762A4 /* KeyFilter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyFilter.m; sourceTree = "<group>"; };
 		E2A6019C27184F60004762A4 /* KeyFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyFilter.h; sourceTree = "<group>"; };
+		E2AC2EFC2736A04D0095ED3E /* EventLogger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventLogger.m; sourceTree = "<group>"; };
+		E2AC2EFE2736A0620095ED3E /* EventLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventLogger.h; sourceTree = "<group>"; };
 		E2DF5F39271AD12A00EDC987 /* BankedKeyController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BankedKeyController.m; sourceTree = "<group>"; };
 		E2DF5F3B271AD14F00EDC987 /* BankedKeyController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BankedKeyController.h; sourceTree = "<group>"; };
 		E2E55573270C643D007FBBC2 /* EliKeysC2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EliKeysC2.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -154,6 +158,7 @@
 		E2756CE42711A65F00557267 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E284FD772735351E00FE0ACF /* OSLog.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -179,6 +184,7 @@
 				E2A6019C27184F60004762A4 /* KeyFilter.h */,
 				E240E2E22718B683001939EE /* KeyController.h */,
 				E2964F30272164B30030EDB2 /* NSMutableArray_Shuffling.h */,
+				E2AC2EFE2736A0620095ED3E /* EventLogger.h */,
 			);
 			name = Includes;
 			sourceTree = "<group>";
@@ -197,6 +203,7 @@
 				E20D42A92712F85F00B38178 /* MidiController.m */,
 				E2A6019A27184F50004762A4 /* KeyFilter.m */,
 				E2964F31272165010030EDB2 /* NSMutableArray_Shuffling.m */,
+				E2AC2EFC2736A04D0095ED3E /* EventLogger.m */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -371,6 +378,7 @@
 			files = (
 				E2A6019B27184F50004762A4 /* KeyFilter.m in Sources */,
 				E2E5557E270C643D007FBBC2 /* ViewController.m in Sources */,
+				E2AC2EFD2736A04D0095ED3E /* EventLogger.m in Sources */,
 				E22C09DF2712C7370015CC26 /* ToneGenerator.m in Sources */,
 				E22C09DD2712C5510015CC26 /* TGSineWaveToneGenerator.m in Sources */,
 				E2E55578270C643D007FBBC2 /* AppDelegate.m in Sources */,

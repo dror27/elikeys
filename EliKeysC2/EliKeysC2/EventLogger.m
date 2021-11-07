@@ -88,7 +88,7 @@
     [self append:@"id,timestamp,timedelta,type,subtype,value,more\n"];
 }
 
--(void)log:(unichar)type subtype:(unichar)subtype value:(NSString*)value more:(NSString*)more {
+-(void)log:(NSString*)type subtype:(NSString*)subtype value:(NSString*)value more:(NSString*)more {
     
     struct timespec     tp;
     clock_gettime(CLOCK_REALTIME, &tp);
@@ -97,17 +97,17 @@
     NSUInteger delta = _lastTimestamp ? (timestamp - _lastTimestamp) : 0;
     _rowIndex = _rowIndex + 1;
     
-    [self append:[NSString stringWithFormat:@"%ld,%ld,%ld,%C,%C,%@,%@\n",
+    [self append:[NSString stringWithFormat:@"%ld,%ld,%ld,%@,%@,%@,%@\n",
                  _rowIndex, timestamp, delta, type, subtype, [self quote:value], [self quote:more]]];
     
     _lastTimestamp = timestamp;
 }
 
--(void)log:(unichar)type subtype:(unichar)subtype intValue:(int)value intMore:(int)more {
+-(void)log:(NSString*)type subtype:(NSString*)subtype intValue:(int)value intMore:(int)more {
     [self log:type subtype:subtype value:[NSString stringWithFormat:@"%d", value] more:[NSString stringWithFormat:@"%d", more]];
 }
 
--(void)log:(unichar)type subtype:(unichar)subtype uintValue:(NSUInteger)value uintMore:(NSUInteger)more {
+-(void)log:(NSString*)type subtype:(NSString*)subtype uintValue:(NSUInteger)value uintMore:(NSUInteger)more {
     [self log:type subtype:subtype value:[NSString stringWithFormat:@"%lu", value] more:[NSString stringWithFormat:@"%lu", more]];
 }
 @end

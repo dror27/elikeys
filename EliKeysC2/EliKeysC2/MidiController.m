@@ -72,10 +72,14 @@
             NSString*                    key = [self midiNoteToKey:(int)[(MIKMIDINoteCommand*)cmd note]];
             //[[_vc tones] keyPressed];
             [_vc key:key pressed:TRUE];
-        }
-        else if ( ct == MIKMIDICommandTypeNoteOff ) {
+        } else if ( ct == MIKMIDICommandTypeNoteOff ) {
             [[_vc eventLogger] log:EL_TYPE_MIDI subtype:EL_SUBTYPE_MIDI_NOTE_OFF
                           uintValue:[(MIKMIDINoteCommand*)cmd note] uintMore:[(MIKMIDINoteCommand*)cmd velocity]];
+            NSString*                    key = [self midiNoteToKey:(int)[(MIKMIDINoteCommand*)cmd note]];
+            [_vc key:key pressed:FALSE];
+        } else if ( ct == MIKMIDICommandTypePolyphonicKeyPressure ) {
+            [[_vc eventLogger] log:EL_TYPE_MIDI subtype:EL_SUBTYPE_MIDI_PRESSURE
+                         uintValue:[(MIKMIDIPolyphonicKeyPressureCommand*)cmd note] uintMore:[(MIKMIDIPolyphonicKeyPressureCommand*)cmd pressure]];
             NSString*                    key = [self midiNoteToKey:(int)[(MIKMIDINoteCommand*)cmd note]];
             [_vc key:key pressed:FALSE];
         } else if ( ct == MIKMIDICommandTypeControlChange ) {

@@ -14,6 +14,7 @@
 @property NSFileHandle* handle;
 @property NSRegularExpression* quoteChars;
 @property NSUInteger lastTimestamp;
+@property NSUInteger rowIndex;
 @end
 
 @implementation EventLogger
@@ -39,6 +40,7 @@
     // regex for quote characters
     self.quoteChars = [NSRegularExpression regularExpressionWithPattern:@"[ ,\"]" options:0 error:nil];
     self.lastTimestamp = 0;
+    self.rowIndex = 0;
     
     // start with an empty file
     [@"" writeToFile:_path atomically:TRUE encoding:NSUTF8StringEncoding error:nil];
@@ -83,7 +85,7 @@
 }
 
 -(void)logHeaders {
-    [self append:@"timestamp,timedelta,type,subtype,value,more\n"];
+    [self append:@"id,timestamp,timedelta,type,subtype,value,more\n"];
 }
 
 -(void)log:(unichar)type subtype:(unichar)subtype value:(NSString*)value more:(NSString*)more {
@@ -93,9 +95,10 @@
     NSUInteger  timestamp = 1000 * tp.tv_sec + tp.tv_nsec / 1000000;
     
     NSUInteger delta = _lastTimestamp ? (timestamp - _lastTimestamp) : 0;
+    _rowIndex = _rowIndex + 1;
     
-    [self append:[NSString stringWithFormat:@"%ld,%ld,%C,%C,%@,%@\n",
-                 timestamp, delta, type, subtype, [self quote:value], [self quote:more]]];
+    [self append:[NSString stringWithFormat:@"%ld,%ld,%ld,%C,%C,%@,%@\n",
+                 _rowIndex, timestamp, delta, type, subtype, [self quote:value], [self quote:more]]];
     
     _lastTimestamp = timestamp;
 }

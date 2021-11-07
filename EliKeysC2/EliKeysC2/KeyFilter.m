@@ -240,7 +240,7 @@
             // create new pattern
             NSString* pattern = [_adjPattern stringByReplacingCharactersInRange:_adjRange withString:[NSString stringWithFormat:@"%ld", _adjValue]];
             NSLog(@"pattern: %@", pattern);
-            [_eventLogger log:EL_TYPE_FILTER subtype:EL_SUBTYPE_FILTER_PATTERN value:pattern more:[NSString stringWithFormat:@"ul", v]];
+            [_eventLogger log:EL_TYPE_FILTER subtype:EL_SUBTYPE_FILTER_PATTERN value:pattern more:[NSString stringWithFormat:@"%lu", v]];
 
             // create new regex
             _regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];

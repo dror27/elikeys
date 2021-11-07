@@ -158,8 +158,8 @@
             filePath = "EliKeysC2/ViewController.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "170"
-            endingLineNumber = "170"
+            startingLineNumber = "177"
+            endingLineNumber = "177"
             landmarkName = "-switchKeyController:"
             landmarkType = "7">
          </BreakpointContent>
@@ -369,22 +369,6 @@
             startingLineNumber = "180"
             endingLineNumber = "180"
             landmarkName = "-initWithPattern:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "F255F078-3820-4EEE-85E8-10E8680E0260"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "EliKeysC2/ViewController.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "191"
-            endingLineNumber = "191"
-            landmarkName = "-upperPotSimulatorValueChanged:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

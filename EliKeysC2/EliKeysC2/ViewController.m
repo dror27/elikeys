@@ -66,6 +66,13 @@
     [_keyController enter];
     [self updateWAccDisplay];
     
+    [_upperPotSimulator setValue:64];
+    [_lowerPotSimulator setValue:64];
+    [_sliderSimulator setValue:64];
+    [self controllerSimulatorValueChanged:_upperPotSimulator];
+    [self controllerSimulatorValueChanged:_lowerPotSimulator];
+    [self controllerSimulatorValueChanged:_sliderSimulator];
+
     NSLog(@"viewDidLoad: Done");
     //[_tones chromaticScaleRising:6];
 }
@@ -187,9 +194,7 @@
     NSString*       text = [[_wacc asString] stringByReplacingOccurrencesOfString:@" " withString:@"_"];
     [_waccControl setText:text];
 }
-- (IBAction)upperPotSimulatorValueChanged:(UISlider *)sender {
-    [self adjustKeyFilters:[sender value]];
-}
+
 - (IBAction)controllerSimulatorValueChanged:(UISlider *)sender {
     NSUInteger      value = [sender value];
     if ( sender == _upperPotSimulator )

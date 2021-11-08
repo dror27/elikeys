@@ -90,4 +90,8 @@
     return result;
 }
 
+-(void)fspeak:(NSString*)text {
+    [self flushSpeechQueue];
+    [self speak:text];
+}
 @end

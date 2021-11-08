@@ -20,6 +20,9 @@
 
 -(void)setEventLogger:(EventLogger*)eventLogger;
 
+-(void)fspeak:(NSString*)text;
+
+
 @end
 
 

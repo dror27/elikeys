@@ -20,6 +20,7 @@
 		E2964F32272165010030EDB2 /* NSMutableArray_Shuffling.m in Sources */ = {isa = PBXBuildFile; fileRef = E2964F31272165010030EDB2 /* NSMutableArray_Shuffling.m */; };
 		E2A6019B27184F50004762A4 /* KeyFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = E2A6019A27184F50004762A4 /* KeyFilter.m */; };
 		E2AC2EFD2736A04D0095ED3E /* EventLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E2AC2EFC2736A04D0095ED3E /* EventLogger.m */; };
+		E2D78E492739486F002FB30D /* MultitapKeyController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D78E482739486F002FB30D /* MultitapKeyController.m */; };
 		E2DF5F3A271AD12A00EDC987 /* BankedKeyController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2DF5F39271AD12A00EDC987 /* BankedKeyController.m */; };
 		E2E55578270C643D007FBBC2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E55577270C643D007FBBC2 /* AppDelegate.m */; };
 		E2E5557B270C643D007FBBC2 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E5557A270C643D007FBBC2 /* SceneDelegate.m */; };
@@ -96,6 +97,8 @@
 		E2A6019C27184F60004762A4 /* KeyFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyFilter.h; sourceTree = "<group>"; };
 		E2AC2EFC2736A04D0095ED3E /* EventLogger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventLogger.m; sourceTree = "<group>"; };
 		E2AC2EFE2736A0620095ED3E /* EventLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventLogger.h; sourceTree = "<group>"; };
+		E2D78E482739486F002FB30D /* MultitapKeyController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MultitapKeyController.m; sourceTree = "<group>"; };
+		E2D78E4A2739487F002FB30D /* MultitapKeyController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MultitapKeyController.h; sourceTree = "<group>"; };
 		E2DF5F39271AD12A00EDC987 /* BankedKeyController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BankedKeyController.m; sourceTree = "<group>"; };
 		E2DF5F3B271AD14F00EDC987 /* BankedKeyController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BankedKeyController.h; sourceTree = "<group>"; };
 		E2E55573270C643D007FBBC2 /* EliKeysC2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EliKeysC2.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -192,6 +195,7 @@
 		E2A6019827184E32004762A4 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				E2D78E4327394814002FB30D /* Multitap */,
 				E2964F2C272160930030EDB2 /* Memory */,
 				E2DF5F33271AD0EB00EDC987 /* Banked */,
 				E240E2E52718B9E8001939EE /* Predictor */,
@@ -221,6 +225,15 @@
 				E2E55588270C6440007FBBC2 /* main.m */,
 			);
 			name = StdGlue;
+			sourceTree = "<group>";
+		};
+		E2D78E4327394814002FB30D /* Multitap */ = {
+			isa = PBXGroup;
+			children = (
+				E2D78E482739486F002FB30D /* MultitapKeyController.m */,
+				E2D78E4A2739487F002FB30D /* MultitapKeyController.h */,
+			);
+			name = Multitap;
 			sourceTree = "<group>";
 		};
 		E2DF5F33271AD0EB00EDC987 /* Banked */ = {
@@ -388,6 +401,7 @@
 				E2E55589270C6440007FBBC2 /* main.m in Sources */,
 				E2964F32272165010030EDB2 /* NSMutableArray_Shuffling.m in Sources */,
 				E2E5557B270C643D007FBBC2 /* SceneDelegate.m in Sources */,
+				E2D78E492739486F002FB30D /* MultitapKeyController.m in Sources */,
 				E2E55596270C64D8007FBBC2 /* PredictionTypingMachine.m in Sources */,
 				E2E5559A270C6544007FBBC2 /* DBConnection.m in Sources */,
 				E20D42AA2712F85F00B38178 /* MidiController.m in Sources */,

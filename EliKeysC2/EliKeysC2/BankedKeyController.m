@@ -85,12 +85,17 @@ NSString        *modeSpeechText[3] = {
             [_wacc append:letter];
             //[_vc beepOK];
             [[_vc tones] multiToneRisingShort];
+            [_speech speak:[_speech prepareForSpeech:[_wacc asString]]];
+            if ( [letter isEqualToString:@" "] )
+                letterMode = 0;
         } else {
             NSString* word = [self completionWordAtKey:buttonIndex];
             if ( word != nil ) {
                 [_wacc completeLastWord:word];
                 //[_vc beepOK];
                 [[_vc tones] multiToneRisingShort];
+                [_speech speak:[_speech prepareForSpeech:[_wacc asString]]];
+                letterMode = 0;
             } else {
                 [_vc beepError];
             }

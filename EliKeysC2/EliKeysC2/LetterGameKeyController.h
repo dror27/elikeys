@@ -11,8 +11,8 @@
 #import "KeyController.h"
 #import "ViewController.h"
 
-@interface MultitapKeyController : NSObject<KeyController>
--(MultitapKeyController*)initWith:(ViewController*)vc;
+@interface LetterGameKeyController : NSObject<KeyController>
+-(LetterGameKeyController*)initWith:(ViewController*)vc;
 @end
 
 #endif /* MultitapKeyController_h */

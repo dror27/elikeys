@@ -13,7 +13,7 @@
 #import "PTMKeyController.h"
 #import "BankedKeyController.h"
 #import "MemoryKeyController.h"
-#import "MultitapKeyController.h"
+#import "LetterGameKeyController.h"
 #import "DBConnection.h"
 #import "ToneGenerator.h"
 #import "SpeechController.h"
@@ -62,7 +62,7 @@
                                 [[BankedKeyController alloc] initWith:self],
                                 [[PTMKeyController alloc] initWith:self],
                                 [[MemoryKeyController alloc] initWith:self],
-                                [[MultitapKeyController alloc] initWith:self],
+                                [[LetterGameKeyController alloc] initWith:self],
                                 nil]];
     [self setKeyController:[_allKeyControllers objectAtIndex:0]];
     [_keyController enter];

@@ -19,31 +19,31 @@
 @property WordsAccumulator* wacc;
 @property NSArray<NSString*>* completionWords;
 @property int lastLetterMode;
-@property int lastShift;
-@property BOOL sliderShift;
+@property int letterMode;
+@property NSArray<NSString*>* letterKeys;
+@property NSArray<NSString*>* modeSpeechText;
 @end
 
 #define LETTER_MODE_COUNT       2
 
-@implementation BankedKeyController
+#define KEY_ANNOUNCE            13
+#define KEY_BANKS               0
+#define KEY_BACKSPACE           15
+#define KEY_CLEAR               16
+#define KEY_SUGGEST             14
 
-NSString        *letterKeys[3] = {
-    @"אבגדהוזחטיכ ",
-    @"למנסעפצקרשת ",
-    @"1234567890. "
-};
-int             letterMode = 0;
-NSString        *modeSpeechText[3] = {
-    @"א עד כ",
-    @"ל עד ת",
-    @"מספרים"
-};
+@implementation BankedKeyController
 
 // initilize instance
 -(BankedKeyController*)initWith:(ViewController*)vc
 {
     self = [super init];
     if (self) {
+        
+        _letterMode = 0;
+        self.letterKeys = @[@"אבגדהוזחטיכ ",@"למנסעפצקרשת ",@"1234567890. "];
+        self.modeSpeechText = @[@"א עד כ",@"ל עד ת",@"מספרים"];
+        
         [self setVc:vc];
         [self setSpeech:[_vc speech]];
         [self setWacc:[_vc wacc]];
@@ -57,7 +57,7 @@ NSString        *modeSpeechText[3] = {
 }
 
 -(void)reset {
-    letterMode = 0;
+    _letterMode = 0;
 }
 
 -(void)keyPress:(NSUInteger)keyTag keyFilterIndex:(NSUInteger)filterIndex {
@@ -68,9 +68,12 @@ NSString        *modeSpeechText[3] = {
 - (void)process:(NSUInteger)buttonIndex With:(NSUInteger)op {
     NSLog(@"process: %ld (%ld)", buttonIndex, op);
     if ( op == 0 ) {
-        if ( buttonIndex == 0 ) {
+        if ( buttonIndex == KEY_SUGGEST ) {
             [self complete];
-        } else if ( _completionWords == nil || buttonIndex > 12 ) {
+        } else if ( buttonIndex == KEY_BANKS ) {
+            [self bankKey];
+        } else if ( _completionWords == nil || buttonIndex == KEY_ANNOUNCE
+                   || buttonIndex == KEY_BACKSPACE || buttonIndex == KEY_CLEAR ) {
             [_speech speak:[self buttonDiscoverySpokenText:buttonIndex]];
         } else {
             [self speakCompletionWordAtKey:buttonIndex];
@@ -81,13 +84,13 @@ NSString        *modeSpeechText[3] = {
     // keys 1-12 are letters
     if ( buttonIndex >= 1 && buttonIndex <= 12 ) {
         if ( _completionWords == nil ) {
-            NSString*   letter = [NSString stringWithFormat:@"%C", [letterKeys[letterMode] characterAtIndex:buttonIndex - 1]];
+            NSString*   letter = [NSString stringWithFormat:@"%C", [[_letterKeys objectAtIndex:_letterMode] characterAtIndex:buttonIndex - 1]];
             [_wacc append:letter];
             //[_vc beepOK];
             [[_vc tones] multiToneRisingShort];
             [_speech speak:[_speech prepareForSpeech:[_wacc asString]]];
             if ( [letter isEqualToString:@" "] )
-                letterMode = 0;
+                _letterMode = 0;
         } else {
             NSString* word = [self completionWordAtKey:buttonIndex];
             if ( word != nil ) {
@@ -95,59 +98,42 @@ NSString        *modeSpeechText[3] = {
                 //[_vc beepOK];
                 [[_vc tones] multiToneRisingShort];
                 [_speech speak:[_speech prepareForSpeech:[_wacc asString]]];
-                letterMode = 0;
+                _letterMode = 0;
             } else {
                 [_vc beepError];
             }
             _completionWords = nil;
         }
         
-    } else if ( buttonIndex == 16 ) {
-        [self shift:-1];
+    } else if ( buttonIndex == KEY_CLEAR ) {
+        _letterMode = 0;
         [_wacc clear];
         _completionWords = nil;
         [_vc beepOK];
-    } else if ( buttonIndex == 15 ) {
+    } else if ( buttonIndex == KEY_BACKSPACE ) {
         if ( [_wacc length] > 0 ) {
             [_wacc backspace:1];
         }
         [self speakAcc];
-    } else if ( buttonIndex == 14 ) {
-        if ( _completionWords == nil ) {
-            if ( _sliderShift ) {
-                if ( letterMode != 2 ) {
-                    letterMode = 2;
-                } else
-                    [self shift:-1];
-            } else {
-                letterMode = (letterMode + 1) % LETTER_MODE_COUNT;
-            }
-            [_speech speak:modeSpeechText[letterMode]];
-        } else {
-            _completionWords = nil;
-            [_vc beepError];
-        }
-    } else if ( buttonIndex == 13 ) {
+    } else if ( buttonIndex == KEY_BANKS ) {
+    } else if ( buttonIndex == KEY_ANNOUNCE ) {
         [self speakAccLetterByLetter];
     }
 }
 
--(void)shift:(int)v {
-    if ( v >= 0 ) {
-        letterMode = (v > _lastShift) ? 1 : 0;
-        _lastShift = v;
+-(void)bankKey {
+    if ( _completionWords == nil ) {
+        _letterMode = (_letterMode + 1) % LETTER_MODE_COUNT;
+        [_speech speak:[_modeSpeechText objectAtIndex: _letterMode]];
     } else {
-        letterMode = _lastLetterMode;
+        _completionWords = nil;
+        [_vc beepError];
     }
 }
 
 -(void)resetMode {
-    if ( _sliderShift ) {
-        [self shift:-1];
-    } else {
-        letterMode = 0;
-    }
-    [_speech speak:modeSpeechText[letterMode]];
+    _letterMode = 0;
+    [_speech speak:[_modeSpeechText objectAtIndex:_letterMode]];
 }
 
 -(void)speakAcc {
@@ -203,19 +189,19 @@ NSString        *modeSpeechText[3] = {
     
     // keys 1-12 are letters
     if ( buttonIndex >= 1 && buttonIndex <= 12 ) {
-        NSString*   letter = [NSString stringWithFormat:@"%C", [letterKeys[letterMode] characterAtIndex:buttonIndex - 1]];
+        NSString*   letter = [NSString stringWithFormat:@"%C", [[_letterKeys objectAtIndex:_letterMode] characterAtIndex:buttonIndex - 1]];
         if ( [letter isEqualToString:@" "] )
             letter = @"רווח";
         else if ( [letter isEqualToString:@"."] )
             letter = @"נקודה";
         return letter;
-    } else if ( buttonIndex == 16 ) {
+    } else if ( buttonIndex == KEY_CLEAR ) {
         return @"ניקוי";
-    } else if ( buttonIndex == 15 ) {
+    } else if ( buttonIndex == KEY_BACKSPACE ) {
         return @"מחיקה";
-    } else if ( buttonIndex == 14 ) {
+    } else if ( buttonIndex == KEY_BANKS ) {
         return @"לוחות";
-    } else if ( buttonIndex == 13 ) {
+    } else if ( buttonIndex == KEY_ANNOUNCE ) {
         if ( [_wacc length] )
             return [_speech prepareForSpeech:[_wacc asString]];
         else
@@ -303,10 +289,6 @@ NSString        *modeSpeechText[3] = {
     } else {
         return nil;
     }
-}
-
--(void)changeSliderShift:(BOOL)v {
-    _sliderShift = v;
 }
 
 -(void)enter {

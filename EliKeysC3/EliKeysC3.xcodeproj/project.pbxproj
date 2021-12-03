@@ -23,6 +23,7 @@
 		E22C86172757E77B00794F7B /* LetterGameKeyController.m in Sources */ = {isa = PBXBuildFile; fileRef = E22C86102757E77B00794F7B /* LetterGameKeyController.m */; };
 		E22C86182757E77B00794F7B /* NSMutableArray_Shuffling.m in Sources */ = {isa = PBXBuildFile; fileRef = E22C86112757E77B00794F7B /* NSMutableArray_Shuffling.m */; };
 		E22C861B2757E94D00794F7B /* WordsAccumulator.m in Sources */ = {isa = PBXBuildFile; fileRef = E22C861A2757E94D00794F7B /* WordsAccumulator.m */; };
+		E2424E4B275A3EC300E31EBB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2424E4A275A3EC300E31EBB /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +57,7 @@
 		E22C86112757E77B00794F7B /* NSMutableArray_Shuffling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSMutableArray_Shuffling.m; sourceTree = "<group>"; };
 		E22C86192757E94200794F7B /* WordsAccumulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WordsAccumulator.h; sourceTree = "<group>"; };
 		E22C861A2757E94D00794F7B /* WordsAccumulator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WordsAccumulator.m; sourceTree = "<group>"; };
+		E2424E4A275A3EC300E31EBB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +90,7 @@
 		E22C85CB2757D1CC00794F7B /* EliKeysC3 */ = {
 			isa = PBXGroup;
 			children = (
+				E2424E4A275A3EC300E31EBB /* Assets.xcassets */,
 				E22C86022757E6B400794F7B /* Sources */,
 				E22C86012757E6A200794F7B /* Includes */,
 				E22C85E52757D41F00794F7B /* Resources */,
@@ -206,6 +209,7 @@
 				E22C85D92757D1CE00794F7B /* Assets.xcassets in Resources */,
 				E22C85D72757D1CC00794F7B /* Main.storyboard in Resources */,
 				E22C85E72757D43A00794F7B /* Eli Keyboard Layout.png in Resources */,
+				E2424E4B275A3EC300E31EBB /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -370,14 +374,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 5MBEMM8VZS;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EliKeysC3/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = EliKeysC3;
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -397,14 +405,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 5MBEMM8VZS;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EliKeysC3/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = EliKeysC3;
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
